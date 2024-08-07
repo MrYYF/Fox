@@ -9,6 +9,7 @@ public class LevelController : MonoBehaviour
     {
         if (collision.name == "Player")
         {
+            Debug.Log("¿ªÊ¼");
             SceneManager.LoadScene(1);
         }
     }

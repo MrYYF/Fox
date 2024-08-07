@@ -97,8 +97,8 @@ public class PlayerController : MonoBehaviour
 
     void ResetAbilityCount()
     {
-        jumpCount = 1;
-        dashCount = 0;
+        jumpCount = 2;
+        dashCount = 2;
     }
     
 
