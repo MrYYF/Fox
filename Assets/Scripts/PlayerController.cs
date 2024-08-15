@@ -1,24 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.U2D;
 
 public class PlayerController : MonoBehaviour
 {
     [Tooltip("速度")]
     public float speed = 10f; //移动速度
     [Tooltip("跳跃推力")]
-    public float jumpForce = 7f;
+    public float jumpForce = 10f;
     [Tooltip("冲刺推力")]
-    public float dashForce = 5f;
+    public float dashForce = 3f;
 
     public float smoothTime = 1f;
     public Vector2 currentVelocity;
 
-    public int jumpCount = 2;
-    public int dashCount = 1;
+    int jumpCount;
+    int dashCount;
 
     new Rigidbody2D rigidbody2D;
     public Vector2 moveDirection;
@@ -28,6 +23,8 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        jumpCount = MainManager.Instance.maxJumpCount;
+        dashCount = MainManager.Instance.maxDashCount;
     }
 
     void Update()
@@ -37,6 +34,16 @@ public class PlayerController : MonoBehaviour
         Dash();
     }
 
+    //碰撞地面检测
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            ResetAbilityCount();
+        }
+    }
+
+    //根据输入计算移动向量
     void MoveDirection()
     {
         if (Input.GetKey(KeyCode.A))
@@ -53,6 +60,7 @@ public class PlayerController : MonoBehaviour
         moveDirection.Normalize();
     }
 
+    //实现平滑移动
     void CharacterMovement()
     {
         // 当前物体的位置
@@ -73,11 +81,13 @@ public class PlayerController : MonoBehaviour
         
         if (jumpCount>0 && Input.GetKeyDown(KeyCode.W))
         {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpCount --;
         }
     }
 
+    //冲刺
     void Dash()
     {
         if (Input.GetKeyDown(KeyCode.Space) && dashCount>0)
@@ -87,18 +97,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            ResetAbilityCount();
-        }
-    }
-
+    //重置移动技能次数
     void ResetAbilityCount()
     {
-        jumpCount = 2;
-        dashCount = 2;
+        jumpCount = MainManager.Instance.maxJumpCount;
+        dashCount = MainManager.Instance.maxDashCount;
     }
     
 

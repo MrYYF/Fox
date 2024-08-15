@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * 在指定区域内随机位置生成预制件prefab
+ */
 public class GenerateFox : MonoBehaviour
 {
 

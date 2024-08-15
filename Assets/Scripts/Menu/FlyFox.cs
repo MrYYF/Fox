@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * 实现狐狸乱飞效果
+ */
 public class FlyFox : MonoBehaviour
 {
     public new Rigidbody2D rigidbody2D;

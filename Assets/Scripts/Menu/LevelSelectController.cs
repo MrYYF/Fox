@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/**
+ * 实现选关功能
+ */
 public class LevelSelectController : MonoBehaviour
 {
     private Button button;
