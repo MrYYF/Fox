@@ -17,12 +17,15 @@ public class PlayerController : MonoBehaviour
 
     new Rigidbody2D rigidbody2D;
     public Vector2 moveDirection;
-
+    Animator animator;
+    SpriteRenderer spriteRenderer;
 
     //初始化组件
     void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         jumpCount = MainManager.Instance.maxJumpCount;
         dashCount = MainManager.Instance.maxDashCount;
     }
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveDirection();
+        AnimationController();
         CharacterMovement();
         Dash();
     }
@@ -57,7 +61,37 @@ public class PlayerController : MonoBehaviour
         else
             moveDirection = Vector2.zero;
 
+        
         moveDirection.Normalize();
+    }
+
+    void AnimationController()
+    {
+        if (moveDirection.x != 0)
+        {
+            animator.SetBool("IsRunning", true);
+            if (moveDirection.x < 0)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
+        } else
+            animator.SetBool("IsRunning", false);
+
+
+        if (rigidbody2D.velocity.y > 0)
+            animator.SetBool("IsJumping", true);
+        else if(rigidbody2D.velocity.y==0 && moveDirection.y < 0)
+            animator.SetBool("IsCrouching", true);
+        else if (rigidbody2D.velocity.y < 0)
+            animator.SetBool("IsFall", true);
+        else if (rigidbody2D.velocity.y == 0)
+        {
+            animator.SetBool("IsFall", false);
+            animator.SetBool("IsJumping", false);
+            animator.SetBool("IsCrouching", false);
+        }
+
+        animator.SetFloat("ySpeed", rigidbody2D.velocity.y);
     }
 
     //实现平滑移动

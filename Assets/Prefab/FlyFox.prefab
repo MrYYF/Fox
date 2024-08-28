@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6849060460156464438}
   - component: {fileID: 4628179014850635080}
   m_Layer: 0
-  m_Name: Fox
+  m_Name: FlyFox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

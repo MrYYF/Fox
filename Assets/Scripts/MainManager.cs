@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UIElements;
 
+[DefaultExecutionOrder(-1)]
 public class MainManager : MonoBehaviour
 {
     public static MainManager Instance;
@@ -11,6 +14,7 @@ public class MainManager : MonoBehaviour
 
     private void Awake()
     {
+        //Initialization();
         if (Instance != null)
         {
             Destroy(gameObject);
@@ -19,4 +23,15 @@ public class MainManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
+    void Initialization()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
 }
