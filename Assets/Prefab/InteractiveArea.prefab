@@ -173,7 +173,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: it seems like a deep hole in front
+  m_Text: input text here
 --- !u!1 &4631275730807405150
 GameObject:
   m_ObjectHideFlags: 0

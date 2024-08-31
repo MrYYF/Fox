@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 /**
@@ -9,12 +8,17 @@ using UnityEngine.UI;
  */
 public class Interactive : MonoBehaviour
 {
+    [Tooltip("进入触发区域时显示的文字")]
     public GameObject interactiveTipText;
+    [Tooltip("按下交互键后依次显示的文字列表")]
     public List<GameObject> displayTextList;
+    [Tooltip("每段文字显示的时间")]
     public float displayTime = 2f;
+    [Tooltip("交互文字的显示是否为一次性")]
+    public bool disposable = false;
 
-    bool isInTrigger = false;
-    bool isDisplayingTextList = false;
+    bool isInTrigger = false; //是否在触发区域
+    bool isDisplayingTextList = false; //是否正在显示文字
 
     private void Awake()
     {
@@ -32,7 +36,6 @@ public class Interactive : MonoBehaviour
                 }
             }
         }
-
         if (interactiveTipText != null)
         {
             interactiveTipText.SetActive(false);
@@ -41,12 +44,16 @@ public class Interactive : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && isInTrigger && !isDisplayingTextList)
+        if (Input.GetKeyDown(KeyCode.E) && isInTrigger)
         {
-            isDisplayingTextList = true;
-            // 启动协程显示UI元素
-            StartCoroutine(DisplayTextList());
-            interactiveTipText.SetActive(false);
+            //显示对话
+            if(!isDisplayingTextList)
+            {
+                isDisplayingTextList = true;
+                // 启动协程显示UI元素
+                StartCoroutine(DisplayTextList());
+                interactiveTipText.SetActive(false);
+            }
         }
     }
 
@@ -54,7 +61,8 @@ public class Interactive : MonoBehaviour
     {
         if(collision.name == "Player")
         {
-            interactiveTipText.SetActive(true);
+            if (!isDisplayingTextList)
+                interactiveTipText.SetActive(true);
             isInTrigger = true;
         }
     }
@@ -68,6 +76,7 @@ public class Interactive : MonoBehaviour
         }
     }
 
+    //协程实现显示文字列表
     private IEnumerator DisplayTextList()
     {
         if(displayTextList != null)
@@ -84,5 +93,12 @@ public class Interactive : MonoBehaviour
         }
         isDisplayingTextList = false;
         interactiveTipText.SetActive(true);
+
+        //一次性显示则在结束时删除
+        if (disposable)
+        {
+            Destroy(gameObject);
+        }
     }
+
 }
