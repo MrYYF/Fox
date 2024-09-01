@@ -11,6 +11,7 @@ public class MainManager : MonoBehaviour
 
     public int maxJumpCount=2;
     public int maxDashCount=1;
+    public int hp = 3;
 
     private void Awake()
     {

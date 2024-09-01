@@ -28,7 +28,7 @@ public class CrankController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && isInTrigger)
         {
             //Ìæ»»ÌùÍ¼
             if (changeSprite != null)
@@ -71,8 +71,6 @@ public class CrankController : MonoBehaviour
         {
             foreach (GameObject gameObject in interactiveGameObjectList)
             {
-                Debug.Log(gameObject.name);
-                Debug.Log(gameObject.activeSelf);
                 if (gameObject != null)
                     gameObject.SetActive(!gameObject.activeSelf);
             }

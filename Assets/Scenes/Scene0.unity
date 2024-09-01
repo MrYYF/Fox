@@ -511,8 +511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff95d934c2e551498b957aedb69b1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxJumpCount: 2
-  maxDashCount: 1
+  maxJumpCount: 1
+  maxDashCount: 0
+  hp: 3
 --- !u!4 &228892486
 Transform:
   m_ObjectHideFlags: 0

@@ -226,7 +226,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: But it's to early to back
+  m_Text: But it's too early to back
 --- !u!222 &122973240
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -953,6 +953,7 @@ MonoBehaviour:
   - {fileID: 122973237}
   - {fileID: 549240135}
   displayTime: 2
+  disposable: 0
 --- !u!1 &933631519
 GameObject:
   m_ObjectHideFlags: 0
@@ -12362,6 +12363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxJumpCount: 2
   maxDashCount: 1
+  hp: 3
 --- !u!4 &2131128470
 Transform:
   m_ObjectHideFlags: 0

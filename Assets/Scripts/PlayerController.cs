@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,17 +9,18 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     [Tooltip("冲刺推力")]
     public float dashForce = 3f;
-
     public float smoothTime = 1f;
     public Vector2 currentVelocity;
+    public Vector2 moveDirection;
 
     int jumpCount;
     int dashCount;
 
     new Rigidbody2D rigidbody2D;
-    public Vector2 moveDirection;
     Animator animator;
     SpriteRenderer spriteRenderer;
+    private bool isjump = false;
+    
 
     //初始化组件
     void Awake()
@@ -39,11 +41,32 @@ public class PlayerController : MonoBehaviour
     }
 
     //碰撞地面检测
-    void OnCollisionEnter2D(Collision2D collision)
+    //void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.collider.CompareTag("Ground"))
+    //    {
+    //        ResetAbilityCount();
+    //    }
+    //}
+
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Ground"))
         {
-            ResetAbilityCount();
+            if (rigidbody2D.velocity.y == 0f && isjump)
+            {
+                ResetAbilityCount();
+                isjump = false;
+            }
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            if (!isjump)
+                StartCoroutine(CoyoteTime());
         }
     }
 
@@ -61,7 +84,7 @@ public class PlayerController : MonoBehaviour
         else
             moveDirection = Vector2.zero;
 
-        
+
         moveDirection.Normalize();
     }
 
@@ -117,7 +140,6 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
             rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            jumpCount --;
         }
     }
 
@@ -137,7 +159,19 @@ public class PlayerController : MonoBehaviour
         jumpCount = MainManager.Instance.maxJumpCount;
         dashCount = MainManager.Instance.maxDashCount;
     }
-    
+
+    //土狼跳
+    private IEnumerator CoyoteTime()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (jumpCount > 0)
+        {
+            jumpCount--;
+            isjump = true;
+        }
+            
+    }
+
 
 
 

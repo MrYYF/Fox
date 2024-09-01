@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 441a2d89600064d4d9ced045b19d0ae6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -200,7 +200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2023565146612278239, guid: 663ffa32fa816e24a96fcc6570d5c11e, type: 3}
       propertyPath: m_Text
-      value: 'Press ''e'' to use '
+      value: Press 'e' to use crank
       objectReference: {fileID: 0}
     - target: {fileID: 2330005128341528963, guid: 663ffa32fa816e24a96fcc6570d5c11e, type: 3}
       propertyPath: m_Text
