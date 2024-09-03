@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9202345050461695055}
   - component: {fileID: 3526808863143157958}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: tileset-sliced_76
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 753070062664275235}
   - component: {fileID: 1145437384014169009}
   - component: {fileID: 2230458827469120066}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: MoveableStep
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1821459134205723254}
   - component: {fileID: 5911603687364039587}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: tileset-sliced_75
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5208482621234329670}
   - component: {fileID: 2140879522451574593}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: tileset-sliced_77
   m_TagString: Untagged
   m_Icon: {fileID: 0}

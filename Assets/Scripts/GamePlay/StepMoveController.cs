@@ -12,24 +12,23 @@ public class StepMoveController : MonoBehaviour
     Vector2 start;
     Vector2 target; // 当前目标点
     bool direction = true;
-    Rigidbody2D rb;
+    Rigidbody2D rigidbody2D;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
         target = end;
         start = transform.position;
     }
 
-    void Update()
+    
+    void FixedUpdate()
     {
         // 计算物体当前位置到目标点的距离
         float step = speed * Time.fixedDeltaTime; // 每帧移动的距离
-        Vector2 newPosition = Vector2.MoveTowards(rb.position, target, step);
+        Vector2 newPosition = Vector2.MoveTowards(rigidbody2D.position, target, step);
         //Vector2 newPosition = Vector2.SmoothDamp(rb.position, target, ref velocity, smoothTime, speed, Time.fixedDeltaTime);
-        rb.MovePosition(newPosition);
-
-
+        rigidbody2D.MovePosition(newPosition);
 
         // 检查物体是否到达目标点
         if (Vector2.Distance(transform.position, target) < 0.1f)
@@ -40,5 +39,15 @@ public class StepMoveController : MonoBehaviour
         }
     }
 
-
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            Rigidbody2D playerRigidbody2D = collision.gameObject.GetComponent<Rigidbody2D>();
+            if (collision.gameObject.GetComponent<Rigidbody2D>() != null)
+            {
+                playerRigidbody2D.velocity = playerRigidbody2D.velocity + rigidbody2D.velocity;
+            }
+        }
+    }
 }
