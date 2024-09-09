@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Tooltip("速度")]
-    public float speed; //移动速度
+    [Tooltip("普通速度")]
+    public float normalSpeed;
+    [Tooltip("滑铲速度")]
+    public float slideSpeed;
     [Tooltip("跳跃推力")]
     public float jumpForce;
     [Tooltip("冲刺推力")]
     public float dashForce;
 
     public Transform groundDetectTransform;
+    public Transform topDetectTransform;
     public LayerMask groundLayerMask;
 
     Vector2 currentVelocity;
@@ -21,15 +24,22 @@ public class PlayerController : MonoBehaviour
     bool isJumpPressed;
     bool isGround;
 
+    bool isCrouch;
+    bool isCrouchPressed;
+    bool canStandUp;
+
     int jumpCount;
     int dashCount;
 
-    float smoothTime = 1f;
     Rigidbody2D rigidbody2D;
     Animator animator;
     SpriteRenderer spriteRenderer;
-    
-    
+    BoxCollider2D boxCollider2D;
+
+    float currentSpeed; //移动速度
+    float groundDetectRadius = 0.37f;
+    float temp;
+
 
     //初始化组件
     void Awake()
@@ -37,47 +47,50 @@ public class PlayerController : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
         ResetAbilityCount();
+        currentSpeed = normalSpeed;
     }
 
     void Update()
     {
-        
         MoveDirection();
         Move();
         Jump();
+        Crouch();
         AnimationController();
         //Dash();
     }
 
+    
+
     //实现平滑移动
     void Move()
     {
-        Vector2 currentPosition = transform.position; // 当前物体的位置
-        Vector2 targetPosition = currentPosition + moveDirection * speed; //目标位置
+        Vector2 currentPosition = rigidbody2D.position; // 当前物体的位置
+        Vector2 targetPosition = currentPosition + moveDirection * currentSpeed; //目标位置
 
         // 平滑移动到目标位置
         Vector2.SmoothDamp(
             currentPosition,
             targetPosition,
             ref currentVelocity,
-            smoothTime
+            1f
         );
 
         rigidbody2D.velocity = new Vector2(currentVelocity.x, rigidbody2D.velocity.y);
+        
     }
 
     void Jump()
     {
-        isGround = Physics2D.OverlapCircle(groundDetectTransform.position, 0.1f, groundLayerMask);
-        Debug.Log(isGround);
+        isGround = Physics2D.OverlapCircle(groundDetectTransform.position, groundDetectRadius, groundLayerMask);
         
-        if (Input.GetKeyDown(KeyCode.W) && jumpCount > 0)
+        if ( Input.GetKeyDown(KeyCode.W) && jumpCount > 0)
         {
             isJumpPressed = true;
         }
             
-
         //在地面
         if (isGround)
         {
@@ -94,8 +107,54 @@ public class PlayerController : MonoBehaviour
             isJump = true;
             isJumpPressed = false;
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-            rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            if (isCrouch && isGround)
+                rigidbody2D.AddForce(Vector2.up * jumpForce * 1.5f, ForceMode2D.Impulse); //下蹲跳
+            else
+                rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
             jumpCount--;
+        }
+    }
+    //土狼跳
+    //private IEnumerator CoyoteTime()
+    //{
+    //    yield return new WaitForSeconds(0.1f);
+    //    if (jumpCount > 0)
+    //    {
+    //        jumpCount--;
+    //        isJump = true;
+    //    }
+
+    //}
+
+    void Crouch()
+    {
+        canStandUp = !Physics2D.OverlapCircle(topDetectTransform.position, groundDetectRadius, groundLayerMask);
+
+        if (Input.GetKeyDown(KeyCode.S))
+            isCrouchPressed = true;
+        else if (Input.GetKeyUp(KeyCode.S))
+            isCrouchPressed = false;
+
+        if (isCrouchPressed)
+            isCrouch = true;
+        else if (!isCrouchPressed && canStandUp)
+            isCrouch = false;
+        else if (!canStandUp && !isJump)
+            isCrouch = true;
+
+        if (isCrouch)
+        {
+            if (isGround)
+                Mathf.SmoothDamp(currentSpeed, slideSpeed, ref currentSpeed, 0.5f);
+            boxCollider2D.offset = new Vector2(boxCollider2D.offset.x, -0.1f);
+            boxCollider2D.size = new Vector2(boxCollider2D.size.x, 0.1f);
+        } 
+        else
+        {
+            currentSpeed = Mathf.SmoothDamp(currentSpeed, normalSpeed, ref temp, 0.1f);
+            boxCollider2D.offset = new Vector2(boxCollider2D.offset.x, -0.06f);
+            boxCollider2D.size = new Vector2(boxCollider2D.size.x, 0.2f);
         }
     }
 
@@ -116,30 +175,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //土狼跳
-    //private IEnumerator CoyoteTime()
-    //{
-    //    yield return new WaitForSeconds(0.1f);
-    //    if (jumpCount > 0)
-    //    {
-    //        jumpCount--;
-    //        isJump = true;
-    //    }
-
-    //}
-
     //根据输入计算移动向量
-
     void MoveDirection()
     {
         if (Input.GetKey(KeyCode.A))
             moveDirection.x = -1;
         else if (Input.GetKey(KeyCode.D))
             moveDirection.x = 1;
-        else if (Input.GetKey(KeyCode.W))
-            moveDirection.y = 1;
-        else if (Input.GetKey(KeyCode.S))
-            moveDirection.y = -1;
         else
             moveDirection = Vector2.zero;
         moveDirection.Normalize();
@@ -148,31 +190,27 @@ public class PlayerController : MonoBehaviour
     //动画控制
     void AnimationController()
     {
-        if (moveDirection.x != 0)
+        if (Mathf.Abs(rigidbody2D.velocity.x) > 1f)
         {
             animator.SetBool("IsRunning", true);
             if (moveDirection.x < 0)
                 spriteRenderer.flipX = true;
-            else
+            else if (moveDirection.x > 0)
                 spriteRenderer.flipX = false;
         } else
             animator.SetBool("IsRunning", false);
 
-
-        if (rigidbody2D.velocity.y > 0)
-            animator.SetBool("IsJumping", true);
-        else if (rigidbody2D.velocity.y == 0 && moveDirection.y < 0)
-            animator.SetBool("IsCrouching", true);
-        else if (rigidbody2D.velocity.y < 0)
+        if (isJump && rigidbody2D.velocity.y < 0)
             animator.SetBool("IsFall", true);
-        else if (rigidbody2D.velocity.y == 0)
-        {
+        else
             animator.SetBool("IsFall", false);
-            animator.SetBool("IsJumping", false);
-            animator.SetBool("IsCrouching", false);
-        }
 
-        animator.SetFloat("ySpeed", rigidbody2D.velocity.y);
+        animator.SetBool("IsJumping", isJump);
+        animator.SetBool("IsCrouching", isCrouch);
+
+        
+        
+
     }
 
 

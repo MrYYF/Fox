@@ -305,23 +305,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2912296067592931710, guid: a0034a97598746841b5a6d279581681b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 4128375022527076233, guid: a0034a97598746841b5a6d279581681b, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8238137404388258040, guid: a0034a97598746841b5a6d279581681b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a1113487f09af5c4d9b0a34cc990e8d9, type: 2}
+    - target: {fileID: 8633469323241885150, guid: a0034a97598746841b5a6d279581681b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8633469323241885150, guid: a0034a97598746841b5a6d279581681b, type: 3}
       propertyPath: m_AngularDrag
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8633469323241885150, guid: a0034a97598746841b5a6d279581681b, type: 3}
+      propertyPath: m_GravityScale
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8977751044037800792, guid: a0034a97598746841b5a6d279581681b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1967016205}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0034a97598746841b5a6d279581681b, type: 3}
 --- !u!1 &366756133
 GameObject:
@@ -8783,46 +8792,6 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 1834351405}
---- !u!1 &1967016203 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8977751044037800792, guid: a0034a97598746841b5a6d279581681b, type: 3}
-  m_PrefabInstance: {fileID: 165385189}
-  m_PrefabAsset: {fileID: 0}
---- !u!58 &1967016205
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1967016203}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1
 --- !u!1 &1996951040
 GameObject:
   m_ObjectHideFlags: 0
