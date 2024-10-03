@@ -7,11 +7,11 @@ public class CameraController : MonoBehaviour
 
     public Transform focus;
     public float smoothTime = 5f;
-    Vector3 offset;
+    Vector3 offset = new Vector3(0, 0, 10);
 
-    private void Awake()
+    void Awake()
     {
-        offset = focus.position - transform.position;
+        gameObject.transform.position = focus.position - offset;
     }
 
     void Update()

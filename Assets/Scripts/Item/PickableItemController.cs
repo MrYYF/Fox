@@ -62,13 +62,13 @@ public class PickableItemController : MonoBehaviour
             switch (itemFunction)
             {
                 case ItemFunction.IncreaseJumpCount:
-                    MainManager.Instance.maxJumpCount++;
+                    PlayerManager.PlayerManagerInstance.maxJumpCount++;
                     break;
                 case ItemFunction.IncreaseDashCount:
-                    MainManager.Instance.maxDashCount++;
+                    PlayerManager.PlayerManagerInstance.maxDashCount++;
                     break;
                 case ItemFunction.Heal:
-                    MainManager.Instance.hp++;
+                    PlayerManager.PlayerManagerInstance.maxHitPoint++;
                     break;
             }
         }

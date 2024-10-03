@@ -176,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalSpeed: 10
   slideSpeed: 2.5
-  jumpForce: 10
+  jumpForce: 12
   dashForce: 3
   groundDetectTransform: {fileID: 2912296067592931710}
   topDetectTransform: {fileID: 76671081855936275}

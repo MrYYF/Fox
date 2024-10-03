@@ -7,32 +7,23 @@ using UnityEngine.UIElements;
 [DefaultExecutionOrder(-1)]
 public class MainManager : MonoBehaviour
 {
-    public static MainManager Instance;
-
-    public int maxJumpCount=2;
-    public int maxDashCount=1;
-    public int hp = 3;
+    public static MainManager MainManagerInstance;
 
     private void Awake()
     {
-        //Initialization();
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        Initialization();
+        
         DontDestroyOnLoad(gameObject);
     }
 
     void Initialization()
     {
-        if (Instance != null)
+        if (MainManagerInstance != null)
         {
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        MainManagerInstance = this;
     }
 
 }

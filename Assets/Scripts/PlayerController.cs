@@ -62,8 +62,6 @@ public class PlayerController : MonoBehaviour
         //Dash();
     }
 
-    
-
     //实现平滑移动
     void Move()
     {
@@ -86,7 +84,7 @@ public class PlayerController : MonoBehaviour
     {
         isGround = Physics2D.OverlapCircle(groundDetectTransform.position, groundDetectRadius, groundLayerMask);
         
-        if ( Input.GetKeyDown(KeyCode.W) && jumpCount > 0)
+        if ( (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && jumpCount > 0)
         {
             isJumpPressed = true;
         }
@@ -115,6 +113,7 @@ public class PlayerController : MonoBehaviour
             jumpCount--;
         }
     }
+
     //土狼跳
     //private IEnumerator CoyoteTime()
     //{
@@ -131,9 +130,9 @@ public class PlayerController : MonoBehaviour
     {
         canStandUp = !Physics2D.OverlapCircle(topDetectTransform.position, groundDetectRadius, groundLayerMask);
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             isCrouchPressed = true;
-        else if (Input.GetKeyUp(KeyCode.S))
+        else if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow))
             isCrouchPressed = false;
 
         if (isCrouchPressed)
@@ -161,8 +160,8 @@ public class PlayerController : MonoBehaviour
     //重置移动技能次数
     void ResetAbilityCount()
     {
-        jumpCount = MainManager.Instance.maxJumpCount;
-        dashCount = MainManager.Instance.maxDashCount;
+        jumpCount = PlayerManager.PlayerManagerInstance.maxJumpCount;
+        dashCount = PlayerManager.PlayerManagerInstance.maxDashCount;
     }
 
     //冲刺
@@ -178,9 +177,9 @@ public class PlayerController : MonoBehaviour
     //根据输入计算移动向量
     void MoveDirection()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             moveDirection.x = -1;
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             moveDirection.x = 1;
         else
             moveDirection = Vector2.zero;
@@ -207,21 +206,26 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsJumping", isJump);
         animator.SetBool("IsCrouching", isCrouch);
-
-        
-        
-
     }
 
+    //受伤后闪烁
+    public IEnumerator FlashCoroutine()
+    {
+        Color originalColor = spriteRenderer.material.color; // 保存原始颜色
+        Color flashColor = Color.red; // 闪烁时的颜色
+        float flashInterval = 0.1f; // 闪烁间隔
+        int flashCount = Mathf.FloorToInt(PlayerManager.PlayerManagerInstance.invulnerabilityDuration / flashInterval);
 
+        for (int i = 0; i < flashCount; i++)
+        {
+            spriteRenderer.material.color = flashColor; // 设置为闪烁颜色
+            yield return new WaitForSeconds(flashInterval/2);
+            spriteRenderer.material.color = originalColor; // 恢复原始颜色
+            yield return new WaitForSeconds(flashInterval/2);
+        }
 
-
-
-
-
-
-
-
-
+        // 恢复可受伤状态
+        PlayerManager.PlayerManagerInstance.isInvulnerable = false;
+    }
 
 }

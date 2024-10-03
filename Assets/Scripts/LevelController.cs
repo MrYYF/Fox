@@ -11,20 +11,7 @@ public class LevelController : MonoBehaviour
     {
         if (collision.name == "Player")
         {
-            Debug.Log("¿ªÊ¼");
             SceneManager.LoadScene(levelIndex);
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(0);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
