@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    #region 变量 Variables
+    [Header("基础数值")]
     [Tooltip("普通速度")]
     public float normalSpeed;
     [Tooltip("滑铲速度")]
@@ -38,8 +40,12 @@ public class PlayerController : MonoBehaviour
 
     float currentSpeed; //移动速度
     float groundDetectRadius = 0.37f;
-    float temp;
+    float crouchSpeed;
 
+    bool isInvulnerable = false; // 是否处于无敌状态
+    float invulnerabilityDuration = 1f; //无敌时间
+    int currentHealth;
+    #endregion
 
     //初始化组件
     void Awake()
@@ -48,8 +54,24 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-        ResetAbilityCount();
+        
+        InitializeAbilityCount();
+    }
+
+    //初始化能力数值
+    void InitializeAbilityCount()
+    {
         currentSpeed = normalSpeed;
+        jumpCount = PlayerManager.PlayerManagerInstance.maxJumpCount;
+        dashCount = PlayerManager.PlayerManagerInstance.maxDashCount;
+        currentHealth = PlayerManager.PlayerManagerInstance.maxHitPoint;
+    }
+
+    //重置能力次数
+    void ResetAbilityCount()
+    {
+        jumpCount = PlayerManager.PlayerManagerInstance.maxJumpCount;
+        dashCount = PlayerManager.PlayerManagerInstance.maxDashCount;
     }
 
     void Update()
@@ -62,11 +84,12 @@ public class PlayerController : MonoBehaviour
         //Dash();
     }
 
+    #region 角色移动相关代码
     //实现平滑移动
     void Move()
     {
         Vector2 currentPosition = rigidbody2D.position; // 当前物体的位置
-        Vector2 targetPosition = currentPosition + moveDirection * currentSpeed; //目标位置
+        Vector2 targetPosition = currentPosition + moveDirection * normalSpeed; //目标位置
 
         // 平滑移动到目标位置
         Vector2.SmoothDamp(
@@ -114,7 +137,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //土狼跳
+    //TODO:土狼跳
     //private IEnumerator CoyoteTime()
     //{
     //    yield return new WaitForSeconds(0.1f);
@@ -141,8 +164,8 @@ public class PlayerController : MonoBehaviour
             isCrouch = false;
         else if (!canStandUp && !isJump)
             isCrouch = true;
-
-        if (isCrouch)
+        
+        if (isCrouch) //下蹲时改变碰撞体
         {
             if (isGround)
                 Mathf.SmoothDamp(currentSpeed, slideSpeed, ref currentSpeed, 0.5f);
@@ -151,17 +174,10 @@ public class PlayerController : MonoBehaviour
         } 
         else
         {
-            currentSpeed = Mathf.SmoothDamp(currentSpeed, normalSpeed, ref temp, 0.1f);
+            currentSpeed = Mathf.SmoothDamp(currentSpeed, normalSpeed, ref crouchSpeed, 0.1f);
             boxCollider2D.offset = new Vector2(boxCollider2D.offset.x, -0.06f);
             boxCollider2D.size = new Vector2(boxCollider2D.size.x, 0.2f);
         }
-    }
-
-    //重置移动技能次数
-    void ResetAbilityCount()
-    {
-        jumpCount = PlayerManager.PlayerManagerInstance.maxJumpCount;
-        dashCount = PlayerManager.PlayerManagerInstance.maxDashCount;
     }
 
     //冲刺
@@ -185,7 +201,10 @@ public class PlayerController : MonoBehaviour
             moveDirection = Vector2.zero;
         moveDirection.Normalize();
     }
+    #endregion
 
+    #region 动画
+    //TODO:之后需要将动画部分单独迁移到新的脚本中
     //动画控制
     void AnimationController()
     {
@@ -207,14 +226,35 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping", isJump);
         animator.SetBool("IsCrouching", isCrouch);
     }
+    #endregion
+
+    #region 受伤相关函数
+    // 当玩家受到伤害时调用
+    public void TakeDamage(int damage)
+    {
+        if (!isInvulnerable)
+        {
+            isInvulnerable = true;
+            currentHealth = Mathf.Max(0, currentHealth - damage); // 防止血量小于0
+            PlayerManager.PlayerManagerInstance.UpdateHealthUI(currentHealth);
+
+            if (currentHealth == 0)
+            {
+                LevelManager.LevelManagerInstance.GameOver();
+                return;
+            }
+            
+            StartCoroutine(InjuredFlash());
+        }
+    }
 
     //受伤后闪烁
-    public IEnumerator FlashCoroutine()
+    public IEnumerator InjuredFlash()
     {
         Color originalColor = spriteRenderer.material.color; // 保存原始颜色
         Color flashColor = Color.red; // 闪烁时的颜色
         float flashInterval = 0.1f; // 闪烁间隔
-        int flashCount = Mathf.FloorToInt(PlayerManager.PlayerManagerInstance.invulnerabilityDuration / flashInterval);
+        int flashCount = Mathf.FloorToInt(invulnerabilityDuration / flashInterval);
 
         for (int i = 0; i < flashCount; i++)
         {
@@ -225,7 +265,15 @@ public class PlayerController : MonoBehaviour
         }
 
         // 恢复可受伤状态
-        PlayerManager.PlayerManagerInstance.isInvulnerable = false;
+        isInvulnerable = false;
     }
 
+    //受伤后弹开
+    public void InjuredBounceOff(Vector3 position)
+    {
+        Vector2 vector2 =  transform.position - position; //有害物相对角色的位置
+        rigidbody2D.velocity = -rigidbody2D.velocity; //垂直方向反弹
+        currentVelocity = vector2 * jumpForce; //水平方向反弹
+    }
+    #endregion
 }

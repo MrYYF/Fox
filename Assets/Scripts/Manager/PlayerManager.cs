@@ -14,10 +14,6 @@ public class PlayerManager : MonoBehaviour
     public int maxHitPoint = 3;
 
     public List<Image> healthIconList;
-    int currentHealth;
-
-    public bool isInvulnerable = false; // 是否处于无敌状态
-    public float invulnerabilityDuration = 1f;
 
     void Awake()
     {
@@ -32,17 +28,11 @@ public class PlayerManager : MonoBehaviour
 
     public void Initialization()
     {
-        if (GameObject.Find("Player") != null)
-        {
-            player = GameObject.Find("Player").GetComponent<PlayerController>();
-        }
-        isInvulnerable = false;
-        currentHealth = maxHitPoint;
-        UpdateHealthUI();
+        UpdateHealthUI(maxHitPoint);
     }
 
     // 更新血量UI
-    public void UpdateHealthUI()
+    public void UpdateHealthUI(int currentHealth)
     {
         for (int i = 0; i < healthIconList.Count; i++)
         {
@@ -53,29 +43,5 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    // 当玩家受到伤害时调用
-    public void TakeDamage(int damage)
-    {
-        if (!isInvulnerable)
-        {
-            isInvulnerable = true;
-            currentHealth -= damage;
-            UpdateHealthUI();
-            if (currentHealth <= 0)
-            {
-                currentHealth = 0;  // 防止血量小于0
-                LevelManager.LevelManagerInstance.GameOver();
-                return;
-            }
-
-            if (player == null)
-            {
-                if (GameObject.Find("Player") != null)
-                {
-                    player = GameObject.Find("Player").GetComponent<PlayerController>();
-                }
-            }
-                StartCoroutine(player.FlashCoroutine());
-        }
-    }
+    
 }
