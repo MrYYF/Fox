@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
     void CameraSizeAdjuster()
     {
         float distance = Vector3.Distance(focus.position,transform.position);
-        float targetSize = Mathf.Clamp(5 + (distance - offset.magnitude) * distanceFactor, minSize, maxSize);
+        float targetSize = Mathf.Clamp(minSize + (distance - offset.magnitude) * distanceFactor, minSize, maxSize);
         camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, targetSize, Time.deltaTime * smoothTime);
     }
 }

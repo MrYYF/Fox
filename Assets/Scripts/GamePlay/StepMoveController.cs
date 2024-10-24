@@ -6,7 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class StepMoveController : MonoBehaviour
 {
-    public Vector2 end;
+    [Tooltip("终点坐标")]
+    public Transform end;
+    [Tooltip("移动速度")]
     public float speed =2f;
 
 
@@ -23,7 +25,7 @@ public class StepMoveController : MonoBehaviour
     private void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        target = end;
+        target = end.position;
         start = transform.position;
     }
 
@@ -46,9 +48,15 @@ public class StepMoveController : MonoBehaviour
         {
             // 切换目标点
             direction = !direction;
-            target = direction ? end : start;
+            target = direction ? end.position : start;
         }
 
+    }
+
+    // 绘制到终点的路径
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawLine(transform.position, end.position);
     }
 
     void OnCollisionStay2D(Collision2D collision)
@@ -64,6 +72,11 @@ public class StepMoveController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        playerRigidbody2D = null;
+        if(playerRigidbody2D != null)
+        {
+            //playerRigidbody2D.AddForce(platformMovement / speed, ForceMode2D.Force);
+            //Debug.Log(platformMovement.x / step);
+            playerRigidbody2D = null;
+        }
     }
 }
