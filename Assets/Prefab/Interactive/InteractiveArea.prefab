@@ -95,6 +95,7 @@ MonoBehaviour:
   displayTextList:
   - {fileID: 1066251915382809711}
   displayTime: 2
+  disposable: 0
 --- !u!1 &1066251915382809711
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +292,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.09, y: 3.35}
-  m_SizeDelta: {x: 10, y: 4.9539}
+  m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4979492366173407487
 Canvas:

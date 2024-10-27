@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     BoxCollider2D boxCollider2D;
 
     float currentSpeed; //移动速度
-    float groundDetectRadius = 0.37f;
+    float groundDetectRadius = 0.35f;
     float crouchSpeed;
 
     bool isInvulnerable = false; // 是否处于无敌状态

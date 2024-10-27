@@ -9,6 +9,8 @@ public class CameraController : MonoBehaviour
     [Tooltip("平滑速度")]
     [Range(0f, 10f)]
     public float smoothTime = 5f; //平滑速度
+    public GameObject skyBackground;
+
 
     [Header("相机随运动缩放")]
     [Tooltip("相机缩放最小值")]
@@ -32,6 +34,8 @@ public class CameraController : MonoBehaviour
     {
         CameraSmoothFollower();
         CameraSizeAdjuster();
+
+        skyBackground.transform.position = (Vector2)transform.position;
     }
 
     //相机平滑跟随
