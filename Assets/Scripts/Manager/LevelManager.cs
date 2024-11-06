@@ -49,12 +49,14 @@ public class LevelManager : MonoBehaviour
             isGamePause = true;
             Time.timeScale = 0;
             gamePauseUI.SetActive(true);
+            PlayerManager.PlayerManagerInstance.canMove = false; //禁用玩家操作
         }
         else if (isGamePause) //退出游戏暂停状态
         {
             isGamePause = false;
             Time.timeScale = 1f;
             gamePauseUI.SetActive(false);
+            PlayerManager.PlayerManagerInstance.canMove = true;
         }
     }
 
@@ -65,6 +67,7 @@ public class LevelManager : MonoBehaviour
         isGamePause = true;
         Time.timeScale = 0;
         gameOverUI.SetActive(true);
+        PlayerManager.PlayerManagerInstance.canMove = false;
     }
 
     //返回主菜单

@@ -9,11 +9,16 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager PlayerManagerInstance;
     PlayerController player;
 
+    [Header("能力次数")]
     public int maxJumpCount = 2;
     public int maxDashCount = 1;
     public int maxHitPoint = 3;
 
+    [Header("血量UI图标")]
     public List<Image> healthIconList;
+
+    [Header("状态")]
+    public bool canMove = true;
 
     void Awake()
     {

@@ -76,12 +76,15 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        MoveDirection();
-        Move();
-        Jump();
-        Crouch();
-        AnimationController();
-        //Dash();
+        if (PlayerManager.PlayerManagerInstance.canMove)
+        {
+            MoveDirection();
+            Move();
+            Jump();
+            Crouch();
+            AnimationController();
+            //Dash();
+        }
     }
 
     #region 角色移动相关代码
