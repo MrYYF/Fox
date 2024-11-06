@@ -51,5 +51,76 @@ public class GameSettingsData
         return settings;
     }
 
-    
+    //通过值查询对应屏幕模式
+    public static FullScreenMode QuaryDisplayMode(int displayMode)
+    {
+        switch (displayMode)
+        {
+            case 0:
+                return FullScreenMode.ExclusiveFullScreen; //全屏
+            case 1:
+                return FullScreenMode.FullScreenWindow; //无边框
+            case 2:
+                return FullScreenMode.Windowed; //窗口化
+            default:
+                return FullScreenMode.ExclusiveFullScreen;
+        }
+    }
+    //通过值查询对应分辨率
+    public static int QuaryResolutionWidth(int resolution)
+    {
+        switch (resolution)
+        {
+            case 0:
+                return 800;
+            case 1:
+                return 1024;
+            case 2:
+                return 1280;
+            case 3:
+                return 1366;
+            case 4:
+                return 1600;
+            case 5:
+                return 1920;
+            case 6:
+                return 1920;
+            case 7:
+                return 2560;
+            case 8:
+                return 2560;
+            case 9:
+                return 3840;
+            default:
+                return 1920;
+        }
+    }
+    public static int QuaryResolutionHeight(int resolution)
+    {
+        switch (resolution)
+        {
+            case 0:
+                return 600;
+            case 1:
+                return 768;
+            case 2:
+                return 720;
+            case 3:
+                return 768;
+            case 4:
+                return 900;
+            case 5:
+                return 1080;
+            case 6:
+                return 1200;
+            case 7:
+                return 1440;
+            case 8:
+                return 1600;
+            case 9:
+                return 2160;
+            default:
+                return 1080;
+        }
+    }
 }

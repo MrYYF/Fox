@@ -17228,7 +17228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayMode: {fileID: 1179322617}
   resolution: {fileID: 2117127535}
-  VSync: {fileID: 0}
+  VSync: {fileID: 1568725095}
   frameRateLimit: {fileID: 7993466}
   masterVolume: {fileID: 1102481560}
   masterVolumeText: {fileID: 1784714608}

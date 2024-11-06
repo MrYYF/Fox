@@ -45,12 +45,13 @@ public class GameSettingsManager : MonoBehaviour
         filePath = Application.dataPath + "/Data/settings.json"; // 设置存储路径 /Assets/Data/settings.json
 
         if (File.Exists(filePath)) // 如果文件存在，读取设置
+        {
             LoadSettings();
+        }
         else // 如果没有设置文件，初始化为默认值
         {
             gameSettings = GameSettingsData.CreateDefaultSettings();
             ApplySettings();
-            SaveSettings();
         }
     }
     
@@ -66,155 +67,96 @@ public class GameSettingsManager : MonoBehaviour
     {
         string json = File.ReadAllText(filePath); // 读取文件内容
         gameSettings = JsonUtility.FromJson<GameSettingsData>(json); // 解析 JSON
-
-        displayMode.value = gameSettings.displayMode;
-        resolution.value = gameSettings.resolution;
-        VSync.isOn=gameSettings.VSync;
-        frameRateLimit.value = gameSettings.frameRateLimit;
-
-        masterVolume.value = gameSettings.masterVolume;
-        musicVolume.value = gameSettings.musicVolume;
-        SFXVolume.value = gameSettings.SFXVolume;
-        masterVolumeText.text = Mathf.FloorToInt(gameSettings.masterVolume * 100).ToString();
-        musicVolumeText.text = Mathf.FloorToInt(gameSettings.musicVolume * 100).ToString();
-        SFXVolumeText.text = Mathf.FloorToInt(gameSettings.SFXVolume * 100).ToString();
-
-        ApplySettings();
-    }
-
-    //应用设置
-    public void ApplySettings()
-    {
-        ChangeDisplayModeAndResolution();
-        ChangeTargetFrameRate();
-        ChangeVolume();
+        SyncSettings();
     }
 
     //重置设置
     public void ResetSettings()
     {
         gameSettings = GameSettingsData.CreateDefaultSettings();
-        ApplySettings();
+        SyncSettings();
         SaveSettings();
     }
 
-    //修改设置
-    public void ModifySettings()
+    //应用设置
+    public void ApplySettings()
     {
-        //视频设置修改
-        gameSettings.displayMode = displayMode.value;
-        gameSettings.resolution = resolution.value;
-        gameSettings.VSync = VSync.isOn;
-        gameSettings.frameRateLimit = frameRateLimit.value;
-
-        //音频设置修改
-        gameSettings.masterVolume = masterVolume.value;
-        gameSettings.musicVolume = musicVolume.value;
-        gameSettings.SFXVolume = SFXVolume.value;
-        masterVolumeText.text = Mathf.FloorToInt(masterVolume.value * 100).ToString();
-        musicVolumeText.text = Mathf.FloorToInt(musicVolume.value * 100).ToString();
-        SFXVolumeText.text = Mathf.FloorToInt(SFXVolume.value * 100).ToString();
-
-        //实时预览
-        ChangeVolume();
+        ChangeDisplayMode();
+        ChangeResolution();
+        ChangeVSync();
+        ChangeTargetFrameRate();
+        ChangeMasterVolume(masterVolumeText);
+        ChangeMusicVolume(musicVolumeText);
+        ChangeSFXVolume(SFXVolumeText);
+        SaveSettings();
     }
 
-    //更改视频设置
-    public void ChangeDisplayModeAndResolution()
+    //将UI和设置同步
+    public void SyncSettings()
     {
-        FullScreenMode windowMode = FullScreenMode.Windowed;
-        int resolutionWidth =1920;
-        int resolutionHeight =1080;
+        displayMode.value = gameSettings.displayMode;
+        resolution.value = gameSettings.resolution;
+        VSync.isOn = gameSettings.VSync;
+        frameRateLimit.value = gameSettings.frameRateLimit;
 
+        masterVolume.value = gameSettings.masterVolume;
+        musicVolume.value = gameSettings.musicVolume;
+        SFXVolume.value = gameSettings.SFXVolume;
+    }
+
+    ////修改设置
+    //public void ModifySettings()
+    //{
+
+    //    //视频设置修改
+    //    newGameSettings.displayMode = displayMode.value;
+    //    newGameSettings.resolution = resolution.value;
+    //    newGameSettings.VSync = VSync.isOn;
+    //    newGameSettings.frameRateLimit = frameRateLimit.value;
+
+    //    //音频设置修改
+    //    newGameSettings.masterVolume = masterVolume.value;
+    //    newGameSettings.musicVolume = musicVolume.value;
+    //    newGameSettings.SFXVolume = SFXVolume.value;
+
+    //    //实时预览
+    //    //AudioListener.volume = newGameSettings.masterVolume;
+    //    //musicAudioSource.volume = newGameSettings.musicVolume;
+    //    //SFXAudioSource.volume = newGameSettings.SFXVolume;
+    //}
+
+    //更改视频设置
+    public void ChangeDisplayMode()
+    {
         //设置显示模式
-        switch (gameSettings.displayMode)
-        {
-            case 0:
-                windowMode = FullScreenMode.ExclusiveFullScreen; //全屏
-                break;
-            case 1:
-                windowMode = FullScreenMode.FullScreenWindow; //无边框
-                break;
-            case 2:
-                windowMode = FullScreenMode.Windowed; //窗口化
-                break;
-        }
+        Screen.SetResolution(GameSettingsData.QuaryResolutionWidth(resolution.value), GameSettingsData.QuaryResolutionHeight(resolution.value), GameSettingsData.QuaryDisplayMode(displayMode.value));
+        gameSettings.displayMode = displayMode.value;
+    }
 
+    public void ChangeResolution()
+    {
         //设置分辨率
-        switch (gameSettings.resolution)
-        {
-            case 0:
-                {
-                    resolutionWidth = 800;
-                    resolutionHeight = 600;
-                    break;
-                }
-            case 1:
-                {
-                    resolutionWidth = 1024;
-                    resolutionHeight = 768;
-                    break;
-                }
-            case 2:
-                {
-                    resolutionWidth = 1280;
-                    resolutionHeight = 720;
-                    break;
-                }
-            case 3:
-                {
-                    resolutionWidth = 1366;
-                    resolutionHeight = 768;
-                    break;
-                }
-            case 4:
-                {
-                    resolutionWidth = 1600;
-                    resolutionHeight = 900;
-                    break;
-                }
-            case 5:
-                {
-                    resolutionWidth = 1920;
-                    resolutionHeight = 1080;
-                    break;
-                }
-            case 6:
-                {
-                    resolutionWidth = 1920;
-                    resolutionHeight = 1200;
-                    break;
-                }
-            case 7:
-                {
-                    resolutionWidth = 2560;
-                    resolutionHeight = 1440;
-                    break;
-                }
-            case 8:
-                {
-                    resolutionWidth = 2560;
-                    resolutionHeight = 1600;
-                    break;
-                }
-            case 9:
-                {
-                    resolutionWidth = 3840;
-                    resolutionHeight = 2160;
-                    break;
-                }
+        Screen.SetResolution(GameSettingsData.QuaryResolutionWidth(resolution.value), GameSettingsData.QuaryResolutionHeight(resolution.value), GameSettingsData.QuaryDisplayMode(displayMode.value));
+        gameSettings.resolution = resolution.value;
+    }
 
-        }
+    //更改垂直同步
+    public void ChangeVSync()
+    {
+        if (VSync.isOn) //开启垂直同步
+            QualitySettings.vSyncCount = 1;
+        else
+            QualitySettings.vSyncCount = 0;
 
-        Screen.SetResolution(resolutionWidth, resolutionHeight, windowMode);
+        frameRateLimit.enabled = !VSync.isOn;
+        gameSettings.VSync = VSync.isOn;
     }
 
     //更改帧率限制
     public void ChangeTargetFrameRate()
     {
         int targetFrameRate = -1; //不限制
-
-        switch (gameSettings.frameRateLimit)
+        switch (frameRateLimit.value)
         {
 
             case 0:
@@ -244,15 +186,33 @@ public class GameSettingsManager : MonoBehaviour
                 }
 
         }
-
         Application.targetFrameRate = targetFrameRate;
+
+        gameSettings.frameRateLimit = frameRateLimit.value;
     }
 
     //更改音量设置
-    public void ChangeVolume()
+    public void ChangeMasterVolume(Text volumeText)
     {
-        AudioListener.volume = gameSettings.masterVolume;
-        musicAudioSource.volume = gameSettings.musicVolume;
-        SFXAudioSource.volume = gameSettings.SFXVolume;
+        AudioListener.volume = masterVolume.value;
+        volumeText.text = Mathf.FloorToInt(masterVolume.value * 100).ToString();
+
+        gameSettings.masterVolume = masterVolume.value;
+    }
+
+    public void ChangeMusicVolume(Text volumeText)
+    {
+        musicAudioSource.volume = musicVolume.value;
+        volumeText.text = Mathf.FloorToInt(musicVolume.value * 100).ToString();
+        
+        gameSettings.musicVolume = musicVolume.value;
+    }
+
+    public void ChangeSFXVolume(Text volumeText)
+    {
+        SFXAudioSource.volume = SFXVolume.value;
+        volumeText.text = Mathf.FloorToInt(SFXVolume.value * 100).ToString();
+
+        gameSettings.SFXVolume = SFXVolume.value;
     }
 }
