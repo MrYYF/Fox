@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,10 +7,12 @@ public class LevelManager : MonoBehaviour
     public static LevelManager LevelManagerInstance;
     public GameObject gameOverUI;
     public GameObject gamePauseUI;
+    public GameObject gameOptionsUI;
 
     [Header("状态")]
     public bool isGameOver = false;
     public bool isGamePause = false;
+    public bool isGameOptions = false;
     public bool canPause = false;
 
     void Awake()
@@ -31,17 +31,24 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             //判断是否在不可暂停界面
-            if (SceneManager.GetActiveScene().buildIndex == 0)
+            if (SceneManager.GetActiveScene().buildIndex == 0 && isGameOver)
                 canPause = false;
             else
                 canPause = true;
 
-            if (!isGameOver && canPause)
-                GamePause();
+            //esc回退到上级菜单/呼出菜单
+            if (canPause)
+                if (!isGameOptions && !isGamePause) //未打开任何界面
+                    GamePause();
+                else if (isGamePause) //已打开暂停菜单
+                    if (isGameOptions)
+                        GameOptions();
+                    else
+                        GamePause();
         }
     }
 
-    //游戏暂停
+    //游戏暂停界面
     public void GamePause()
     {
         if (!isGamePause) //进入游戏暂停状态
@@ -60,7 +67,24 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    //游戏结束
+    //游戏设置界面
+    public void GameOptions()
+    {
+        if (!isGameOptions && isGamePause)
+        {
+            isGameOptions = true;
+            gameOptionsUI.SetActive(true);
+            gamePauseUI.SetActive(false);
+        } 
+        else if (isGameOptions) //退出游戏设置界面
+        {
+            isGameOptions = false;
+            gameOptionsUI.SetActive(false);
+            gamePauseUI.SetActive(true);
+        }
+    }
+
+    //游戏结束界面
     public void GameOver()
     {
         isGameOver = true;

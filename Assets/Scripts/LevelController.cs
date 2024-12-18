@@ -15,3 +15,5 @@ public class LevelController : MonoBehaviour
         }
     }
 }
+
+//TODO：学习序列是为了：游戏开始后的过场动画、吃宝石之后的提示

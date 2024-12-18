@@ -1,4 +1,0 @@
-repository "Fox@yyf_yyf@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"
