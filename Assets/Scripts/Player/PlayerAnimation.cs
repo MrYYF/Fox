@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 玩家角色动画控制类
+/// </summary>
 public class PlayerAnimation : MonoBehaviour
 {
     Animator animator;
