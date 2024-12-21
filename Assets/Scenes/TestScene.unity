@@ -132,10 +132,10 @@ GameObject:
   m_Component:
   - component: {fileID: 208782686}
   - component: {fileID: 208782685}
+  - component: {fileID: 208782687}
   - component: {fileID: 208782684}
   - component: {fileID: 208782683}
   - component: {fileID: 208782682}
-  - component: {fileID: 208782687}
   - component: {fileID: 208782688}
   m_Layer: 7
   m_Name: Slimer
@@ -177,7 +177,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.5}
-  m_Size: {x: 1.5, y: 1.5}
+  m_Size: {x: 1, y: 1}
   m_Direction: 0
 --- !u!61 &208782683
 BoxCollider2D:
@@ -222,7 +222,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.25}
+  m_Size: {x: 1, y: 0.2}
   m_EdgeRadius: 0
 --- !u!50 &208782684
 Rigidbody2D:
@@ -355,6 +355,7 @@ MonoBehaviour:
   currentHealth: 0
   damage: 1
   invulnerableDuration: 0
+  isDead: 0
 --- !u!1 &211910647
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,7 +775,7 @@ Transform:
   m_GameObject: {fileID: 220091449}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: 0}
+  m_LocalPosition: {x: -6, y: 3.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -816,7 +817,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -928,6 +929,7 @@ MonoBehaviour:
   currentHealth: 0
   damage: 1
   invulnerableDuration: 1
+  isDead: 0
 --- !u!1 &262068735
 GameObject:
   m_ObjectHideFlags: 3
@@ -5223,7 +5225,7 @@ Transform:
   m_GameObject: {fileID: 1685421139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: -10}
+  m_LocalPosition: {x: -6, y: 3.25, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5341,7 +5343,7 @@ Transform:
   m_GameObject: {fileID: 1685589259}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: -10}
+  m_LocalPosition: {x: -6, y: 3.25, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

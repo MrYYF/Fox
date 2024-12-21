@@ -24,4 +24,9 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool("isGround", physicsCheck.isGround);
         animator.SetBool("isCrouch", playerController.isCrouch);
     }
+
+    public void Hurt()
+    {
+        animator.SetTrigger("hurt");
+    }
 }

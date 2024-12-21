@@ -10,6 +10,4 @@ public class EnemyController : Character
     {
         collision.GetComponent<Character>()?.TakeDamage(this);
     }
-
-    
 }
