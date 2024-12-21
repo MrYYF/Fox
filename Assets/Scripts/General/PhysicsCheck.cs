@@ -19,6 +19,7 @@ public class PhysicsCheck : MonoBehaviour
     void Update()
     {
         GroundCheck();
+        RoofCheck();
     }
     void GroundCheck()
     {

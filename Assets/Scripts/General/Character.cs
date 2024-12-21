@@ -12,10 +12,10 @@ public class Character : MonoBehaviour
     int currentHealth; //当前生命值
     [Tooltip("伤害")]public int damage;
     [Tooltip("无敌时间")] public float invulnerableDuration;
+    float invulnerableCounter; //无敌时间计时器
+    bool isInvulnerable;
     [Tooltip("受伤订阅事件")] public UnityEvent<Transform> OnTakeDamage;
 
-    private float invulnerableCounter; //无敌时间计时器
-    private bool isInvulnerable;
     [HideInInspector]public bool isDead;
 
     private void Start()
