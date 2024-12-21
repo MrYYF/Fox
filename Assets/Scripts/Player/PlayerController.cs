@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
 
     //人物状态
     [HideInInspector]public bool isCrouch;
-    
+    [HideInInspector]public bool isHurt;
+
     #endregion
 
     #region 生命周期函数
@@ -47,18 +48,22 @@ public class PlayerController : MonoBehaviour
     {
         playerInputControl?.Disable();
     }
-    private void Start()
+    void Start()
     {
         currentSpeed = speed;
     }
     void Update()
     {
-        inputDirection = playerInputControl.Gameplay.Move.ReadValue<Vector2>(); //获取输入移动向量
-        Crouch();
+        if (!isHurt)
+        {
+            inputDirection = playerInputControl.Gameplay.Move.ReadValue<Vector2>(); //获取输入移动向量
+            Crouch();
+        }
     }
     void FixedUpdate()
     {
-        Move();
+        if (!isHurt)
+            Move();
     }
     #endregion
 
@@ -140,6 +145,13 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    //受伤弹开
+    public void GetHurt(Transform attacker)
+    {
+        isHurt = true;
+        rb.velocity = Vector2.zero;
 
-    
+        Vector2 direction = new Vector2(transform.position.x - attacker.position.x,0.3f).normalized;
+        rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+    }
 }

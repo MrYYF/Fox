@@ -352,9 +352,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
-  currentHealth: 0
   damage: 1
   invulnerableDuration: 0
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
   isDead: 0
 --- !u!1 &211910647
 GameObject:
@@ -883,6 +885,7 @@ MonoBehaviour:
   jumpForce: 17
   dashForce: 20
   isCrouch: 0
+  isHurt: 0
 --- !u!114 &220091456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,10 +928,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afcd07059e326840a29d2b1a9bf1022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
-  currentHealth: 0
+  maxHealth: 30
   damage: 1
   invulnerableDuration: 1
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 220091457}
+        m_TargetAssemblyTypeName: PlayerAnimation, Assembly-CSharp
+        m_MethodName: Hurt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 220091455}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: GetHurt
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   isDead: 0
 --- !u!1 &262068735
 GameObject:
