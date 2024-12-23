@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
 {
     #region 变量 Variables
     [Header("基础数值")]
-    [Tooltip("速度基准值")] public float speed;
+    [Tooltip("速度基准值")] public float normalSpeed;
     float currentSpeed; //当前速度
     [Tooltip("移动平滑时间")] public float smoothTime;
-    [Tooltip("滑铲速度修正")] public float slideSpeedModify;
+    [Tooltip("滑铲速度修正")] public float slideSpeed;
     [Tooltip("滑铲推力")] public float slideForce;
     [Tooltip("跳跃推力")] public float jumpForce;
     [Tooltip("土狼跳时间")] public float coyoteTime; //土狼跳时间
@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
         col = GetComponent<CapsuleCollider2D>();
         playerInputControl = new PlayerInputControl();
         playerInputControl.Gameplay.Jump.started += Jump;
+        //playerInputControl.Gameplay.Jump.canceled += Bounce;
         playerInputControl.Gameplay.Dash.started += Dash;
     }
     void OnEnable()
@@ -56,7 +57,7 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        currentSpeed = speed;
+        currentSpeed = normalSpeed;
         coyoteTimeCounter = coyoteTime;
     }
     void Update()
@@ -113,6 +114,12 @@ public class PlayerController : MonoBehaviour
 
         //TODO:二段跳
     }
+    //TODO:小跳
+    //void Bounce(InputAction.CallbackContext context)
+    //{
+    //    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.6f);
+    //}
+
     //冲刺
     void Dash(InputAction.CallbackContext context)
     {
@@ -125,14 +132,14 @@ public class PlayerController : MonoBehaviour
         {
             //TODO:蹲键按下后判断当前速度，如果大于某个值就给予一个推力，实现滑铲效果
             isCrouch = true;
-            currentSpeed = speed * slideSpeedModify;
+            currentSpeed = slideSpeed;
             col.offset = new Vector2(col.offset.x, -0.5f);
             col.size = new Vector2(col.size.x, 1);
         }
         else if (isCrouch && !physicsCheck.isRoof) //站起
         {
             isCrouch = false;
-            currentSpeed = speed;
+            currentSpeed = normalSpeed;
             col.offset = new Vector2(col.offset.x, -0.3f);
             col.size = new Vector2(col.size.x, 1.4f);
         }

@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 208782684}
   - component: {fileID: 208782683}
   - component: {fileID: 208782682}
+  - component: {fileID: 208782689}
   - component: {fileID: 208782688}
   m_Layer: 7
   m_Name: Slimer
@@ -176,7 +177,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.5}
+  m_Offset: {x: 0, y: 0.7}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
 --- !u!61 &208782683
@@ -211,10 +212,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.1}
+  m_Offset: {x: 0, y: 0.1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 2.5625, y: 2.375}
     newSize: {x: 2.5625, y: 2.375}
     adaptiveTilingThreshold: 0.5
@@ -312,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 208782680}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -349,6 +350,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0bf1f002b6fb954caaa86acca83544c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalSpeed: 0
+  chaseSpeed: 0
+--- !u!114 &208782689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208782680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0afcd07059e326840a29d2b1a9bf1022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
@@ -777,7 +792,7 @@ Transform:
   m_GameObject: {fileID: 220091449}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: 0}
+  m_LocalPosition: {x: -6, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -836,7 +851,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.3}
+  m_Offset: {x: 0, y: 0.7}
   m_Size: {x: 0.8, y: 1.4}
   m_Direction: 0
 --- !u!50 &220091454
@@ -878,15 +893,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e488a97bcf5aff644a04bfb5c1d33d3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
+  normalSpeed: 16
   smoothTime: 0.8
-  slideSpeedModify: 0
+  slideSpeed: 0
   slideForce: 0
   jumpForce: 17
   coyoteTime: 0.2
   coyoteTimeCounter: 0
   dashForce: 20
-  isJump: 0
   isCrouch: 0
   isHurt: 0
 --- !u!114 &220091456
@@ -901,12 +915,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59af21592205e4847811d9b1ae25b884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundCheckSize: {x: 0.75, y: 0.25}
-  groundCheckoffset: {x: 0, y: -1}
-  isGround: 0
   roofCheckSize: {x: 0.75, y: 0.25}
-  roofCheckoffset: {x: 0, y: 0.25}
+  roofCheckoffset: {x: 0, y: 1.4}
   isRoof: 0
+  groundCheckSize: {x: 0.75, y: 0.25}
+  groundCheckoffset: {x: 0, y: 0}
+  isGround: 0
+  wallCheckDirection: {x: 1, y: 0}
+  wallCheckLength: 1
+  wallCheckoffset: {x: 0, y: 0.7}
+  isWall: 0
 --- !u!114 &220091457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5257,7 +5275,7 @@ Transform:
   m_GameObject: {fileID: 1685421139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: -10}
+  m_LocalPosition: {x: -6, y: 2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5375,7 +5393,7 @@ Transform:
   m_GameObject: {fileID: 1685589259}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 3, z: -10}
+  m_LocalPosition: {x: -6, y: 2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

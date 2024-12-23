@@ -6,18 +6,18 @@ public class EnemyAnimation : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D rb;
-    EnemyController enemyController;
+    Character character;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        enemyController = GetComponent<EnemyController>();
+        character = GetComponent<Character>();
     }
 
     void Update()
     {
-        animator.SetFloat("velocityX", rb.velocity.x);
-        animator.SetBool("Dead", enemyController.isDead);
+        animator.SetFloat("velocityX", Mathf.Abs(rb.velocity.x));
+        animator.SetBool("isDead", character.isDead);
     }
 }
