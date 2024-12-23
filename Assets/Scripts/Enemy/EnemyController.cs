@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     [Header("基本配置")]
     [Tooltip("速度基准值")]public float normalSpeed;
     float currentSpeed;
-    [Tooltip("追逐速度")]public float chaseSpeed;
+    //[Tooltip("追逐速度")]public float chaseSpeed;
     [Tooltip("等待时间")]public float stayTime;
     float stayTimeCounter;
     bool isStay;
@@ -30,23 +30,8 @@ public class EnemyController : MonoBehaviour
     }
     void Update()
     {
-        if (isStay)
-        {
-            stayTimeCounter -= Time.deltaTime;
-            if (stayTimeCounter < 0)
-            {
-                isStay = false;
-                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
-            }
-        }
-        else if (physicsCheck.isWall && !isStay)
-        {
-            stayTimeCounter = stayTime;
-            isStay = true;
-        }
-
+        StayTimeCounter();
     }
-
     void FixedUpdate()
     {
         Move();
@@ -67,12 +52,28 @@ public class EnemyController : MonoBehaviour
         Vector2.SmoothDamp(rb.position, targetPosition, ref currentVelocity, 1);
         rb.velocity = new Vector2(currentVelocity.x, rb.velocity.y);
     }
+    void StayTimeCounter()
+    {
+        if (isStay)
+        {
+            stayTimeCounter -= Time.deltaTime;
+            if (stayTimeCounter < 0)
+            {
+                isStay = false;
+                transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+            }
+        }
+        else if (physicsCheck.isWall && !isStay)
+        {
+            stayTimeCounter = stayTime;
+            isStay = true;
+        }
+    }
 
     //进入伤害判定范围受到伤害
     void OnTriggerStay2D(Collider2D collision)
     {
         collision.GetComponent<Character>()?.TakeDamage(GetComponent<Character>());
     }
-
     
 }

@@ -22,26 +22,19 @@ public class PhysicsCheck : MonoBehaviour
     [Tooltip("Ç½±Ú¼ì²âÉäÏß³¤¶È")] public float wallCheckLength;
     [Tooltip("Ç½±Ú¼ì²âºÐÆ«ÒÆ")] public Vector2 wallCheckoffset;
     public bool isWall;
-
-    Rigidbody2D rb;
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
     void Update()
     {
-        GroundCheck();
         RoofCheck();
+        GroundCheck();
         WallCheck();
-    }
-    void GroundCheck()
-    {
-        isGround = Physics2D.OverlapBox((Vector2)transform.position + groundCheckoffset, groundCheckSize, 0, LayerMask.GetMask("Ground"));
     }
     void RoofCheck()
     {
         isRoof = Physics2D.OverlapBox((Vector2)transform.position + roofCheckoffset, roofCheckSize, 0, LayerMask.GetMask("Ground"));
+    }
+    void GroundCheck()
+    {
+        isGround = Physics2D.OverlapBox((Vector2)transform.position + groundCheckoffset, groundCheckSize, 0, LayerMask.GetMask("Ground"));
     }
     void WallCheck()
     {

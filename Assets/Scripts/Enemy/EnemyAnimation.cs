@@ -20,4 +20,5 @@ public class EnemyAnimation : MonoBehaviour
         animator.SetFloat("velocityX", Mathf.Abs(rb.velocity.x));
         animator.SetBool("isDead", character.isDead);
     }
+
 }

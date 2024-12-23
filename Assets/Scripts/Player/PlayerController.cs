@@ -144,8 +144,6 @@ public class PlayerController : MonoBehaviour
             col.size = new Vector2(col.size.x, 1.4f);
         }
     }
-    
-
     #endregion
 
     //ÊÜÉËµ¯¿ª
@@ -153,8 +151,9 @@ public class PlayerController : MonoBehaviour
     {
         isHurt = true;
         rb.velocity = Vector2.zero;
-
-        Vector2 direction = new Vector2(transform.position.x - attacker.position.x,0.3f).normalized;
+        Vector2 direction = new Vector2(transform.position.x - attacker.position.x, 0.3f).normalized;
         rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
     }
+
+    
 }
