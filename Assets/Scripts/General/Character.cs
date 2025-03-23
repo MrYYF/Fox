@@ -53,6 +53,21 @@ public class Character : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
+    public void TakeDamage(int damage)
+    {
+        if (isInvulnerable || isDead) return; //处于无敌时间
+        if (currentHealth - damage > 0)
+        {
+            currentHealth = currentHealth - damage;
+            TriggerInvulnerable();
+        }
+        else
+        {
+            currentHealth = 0;
+            isDead = true; //死亡判定
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+    }
     //触发无敌状态
     private void TriggerInvulnerable()
     {
