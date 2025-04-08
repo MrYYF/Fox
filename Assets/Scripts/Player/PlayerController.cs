@@ -17,9 +17,12 @@ public class PlayerController : MonoBehaviour
     [Tooltip("滑铲速度修正")] public float slideSpeed;
     [Tooltip("滑铲推力")] public float slideForce;
     [Tooltip("跳跃推力")] public float jumpForce;
-    [Tooltip("土狼跳时间")] public float coyoteTime; //土狼跳时间
+    [Tooltip("土狼跳时间")] public float coyoteTime;
     float coyoteTimeCounter; //土狼跳计时器
+    [Tooltip("跳跃预输入时间")] public float jumpBufferTime; // 跳跃预输入时间
+    float jumpBufferCounter; // 跳跃预输入计时器
     [Tooltip("冲刺推力")] public float dashForce;
+    
 
     /**
      * 组件
@@ -34,8 +37,8 @@ public class PlayerController : MonoBehaviour
      * 状态
      */
     //public bool isJump;
-    [HideInInspector]public bool isCrouch;
-    [HideInInspector]public bool isHurt;
+    [HideInInspector] public bool isCrouch;
+    [HideInInspector] public bool isHurt;
 
     #endregion
 
@@ -68,21 +71,27 @@ public class PlayerController : MonoBehaviour
     {
         if (isHurt) return;
         inputDirection = playerInputControl.Gameplay.Move.ReadValue<Vector2>(); //获取输入移动向量
-        //Crouch();
 
-        //TODO:土狼跳
-        //if (physicsCheck.isGround && !isJump)
-        //{
-        //    coyoteTimeCounter = coyoteTime;
-        //}
-        //else if (!physicsCheck.isGround && isJump)
-        //{
-        //    coyoteTimeCounter -= Time.deltaTime;
-        //}
-        //else if (coyoteTimeCounter < 0 && isJump)
-        //{
-        //    isJump = false;
-        //}
+        // 土狼跳逻辑
+        if (physicsCheck.isGround)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        // 跳跃预输入逻辑
+        if (jumpBufferCounter > 0)
+        {
+            jumpBufferCounter -= Time.deltaTime;
+            if (physicsCheck.isGround || coyoteTimeCounter > 0)
+            {
+                PerformJump();
+                jumpBufferCounter = 0;
+            }
+        }
     }
     void FixedUpdate()
     {
@@ -101,20 +110,19 @@ public class PlayerController : MonoBehaviour
         Vector2.SmoothDamp(rb.position, targetPosition, ref currentVelocity, smoothTime);
         rb.velocity = new Vector2(currentVelocity.x, rb.velocity.y);
         //调整朝向
-        if(currentVelocity.x < 0) transform.localScale = new Vector3( -1, 1, 1);
-        if(currentVelocity.x > 0) transform.localScale = new Vector3( 1, 1, 1);
+        if (currentVelocity.x < 0) transform.localScale = new Vector3(-1, 1, 1);
+        if (currentVelocity.x > 0) transform.localScale = new Vector3(1, 1, 1);
     }
-    //跳跃
+    //重置跳跃输入
     void Jump(InputAction.CallbackContext context)
     {
-        if (physicsCheck.isGround)
-        {
-            //isJump = true;
-            //coyoteTimeCounter = -1;
-            rb.velocity = new Vector2(rb.velocity.x, 0);
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
-        //TODO:二段跳
+        jumpBufferCounter = jumpBufferTime;
+    }
+    //执行跳跃
+    void PerformJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
     //TODO:小跳
     //void Bounce(InputAction.CallbackContext context)
@@ -152,7 +160,7 @@ public class PlayerController : MonoBehaviour
     public void GetHurt(Transform attacker)
     {
         isHurt = true;
-
+        // TODO: 根据接触点弹开
         rb.velocity = Vector2.zero;
         Vector2 direction = new Vector2(transform.position.x - attacker.position.x, 0.3f).normalized;
         rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);

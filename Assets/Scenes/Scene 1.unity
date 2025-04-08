@@ -19992,6 +19992,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2013888151767848460, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: jumpForce
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013888151767848460, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: coyoteTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013888151767848460, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: normalSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013888151767848460, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: jumpBufferTime
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7621529003363563313, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
       propertyPath: m_LocalPosition.x
       value: 77.75
