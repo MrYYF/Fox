@@ -242,14 +242,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e488a97bcf5aff644a04bfb5c1d33d3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSpeed: 16
+  normalSpeed: 10
   smoothTime: 0.8
   slideSpeed: 0
   slideForce: 0
-  jumpForce: 17
-  coyoteTime: 0.2
-  coyoteTimeCounter: 0
+  jumpForce: 10
+  holdJumpForce: 40
+  holdJumpTime: 0.15
+  coyoteTime: 0.1
+  jumpBufferTime: 0.1
   dashForce: 20
+  isJump: 0
   isCrouch: 0
   isHurt: 0
 --- !u!114 &6494721028121412820
