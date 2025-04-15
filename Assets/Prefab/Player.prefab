@@ -245,6 +245,9 @@ MonoBehaviour:
   normalSpeed: 10
   smoothTime: 0.8
   slideSpeed: 0
+  climbSpeed: 3
+  slideDownSpeed: 2
+  climbStamina: 5
   slideForce: 0
   jumpForce: 10
   holdJumpForce: 40
@@ -253,6 +256,7 @@ MonoBehaviour:
   jumpBufferTime: 0.1
   dashForce: 20
   isJump: 0
+  isClimb: 0
   isCrouch: 0
   isHurt: 0
 --- !u!114 &6494721028121412820
@@ -274,6 +278,6 @@ MonoBehaviour:
   groundCheckoffset: {x: 0, y: 0}
   isGround: 0
   wallCheckDirection: {x: 1, y: 0}
-  wallCheckLength: 1
+  wallCheckLength: 0.5
   wallCheckoffset: {x: 0, y: 0.7}
   isWall: 0

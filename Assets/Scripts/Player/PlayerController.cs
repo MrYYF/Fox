@@ -11,21 +11,25 @@ public class PlayerController : MonoBehaviour {
      * 变量 Variables
      */
     [Header("基础数值")]
-    [Tooltip("速度基准值")] public float normalSpeed;
+    [Tooltip("速度基准值")] public float normalSpeed = 10f;
     float currentSpeed; //当前速度
-    [Tooltip("移动平滑时间")] public float smoothTime;
-    [Tooltip("滑铲速度修正")] public float slideSpeed;
-    [Tooltip("滑铲推力")] public float slideForce;
-    [Tooltip("跳跃推力")] public float jumpForce;
-    [Tooltip("持续跳跃推力")] public float holdJumpForce;
-    [Tooltip("持续跳跃推力时间")] public float holdJumpTime; // 持续跳跃时间
+    [Tooltip("移动平滑时间")] public float smoothTime = 0.8f;
+    [Tooltip("滑铲速度修正")] public float slideSpeed = 8f;
+    [Tooltip("攀爬速度修正")] public float climbSpeed = 3f;
+    public float slideDownSpeed = 2f; // 滑落速度
+    public float climbStamina = 5f; // 攀爬体力
+    private float currentStamina;
+    private float gravityScale = 4f; // 重力
+    [Tooltip("滑铲推力")] public float slideForce = 10f;
+    [Tooltip("跳跃推力")] public float jumpForce = 10f;
+    [Tooltip("持续跳跃推力")] public float holdJumpForce = 40f;
+    [Tooltip("持续跳跃推力时间")] public float holdJumpTime = 0.15f;
     float holdJumpCounter; // 持续跳跃计时器
-    [Tooltip("土狼跳时间")] public float coyoteTime;
+    [Tooltip("土狼跳时间")] public float coyoteTime = 0.1f;
     float coyoteTimeCounter; //土狼跳计时器
-    [Tooltip("跳跃预输入时间")] public float jumpBufferTime; // 跳跃预输入时间
+    [Tooltip("跳跃预输入时间")] public float jumpBufferTime = 0.1f; // 跳跃预输入时间
     float jumpBufferCounter; // 跳跃预输入计时器
-    
-    [Tooltip("冲刺推力")] public float dashForce;
+    [Tooltip("冲刺推力")] public float dashForce = 10f;
 
 
     /**
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour {
      * 状态
      */
     [HideInInspector] public bool isJump;
+    [HideInInspector] public bool isClimb;
     [HideInInspector] public bool isCrouch;
     [HideInInspector] public bool isHurt;
 
@@ -56,9 +61,10 @@ public class PlayerController : MonoBehaviour {
         playerInputControl = new PlayerInputControl();
         playerInputControl.Gameplay.Jump.started += StartJump;
         playerInputControl.Gameplay.Jump.canceled += CancelJump;
+        playerInputControl.Gameplay.Climb.started += StartClimb;
+        playerInputControl.Gameplay.Climb.canceled += CancelClimb;
         playerInputControl.Gameplay.Dash.started += Dash;
     }
-
     void OnEnable() {
         playerInputControl?.Enable();
     }
@@ -68,30 +74,35 @@ public class PlayerController : MonoBehaviour {
     void Start() {
         currentSpeed = normalSpeed;
         coyoteTimeCounter = coyoteTime;
+        gravityScale = rb.gravityScale;
+        jumpBufferCounter = 0;
+        holdJumpCounter = 0;
     }
     void Update() {
         if (isHurt) return;
         inputDirection = playerInputControl.Gameplay.Move.ReadValue<Vector2>(); //获取输入移动向量
 
-        // 土狼跳逻辑
-        if (physicsCheck.isGround) 
-            coyoteTimeCounter = coyoteTime;
-        else 
-            coyoteTimeCounter -= Time.deltaTime;
-        
-
-        // 跳跃预输入逻辑
-        if (jumpBufferCounter > 0) {
-            jumpBufferCounter -= Time.deltaTime;
-            if (physicsCheck.isGround || coyoteTimeCounter > 0) {
-                PerformJump();
-                jumpBufferCounter = 0;
+        // 攀爬逻辑
+        if (isClimb && physicsCheck.isWall) {
+            if (currentStamina > 0) {
+                Climb();
+            }
+            else {
+                SlideDown();
             }
         }
+        else {
+            RecoverStamina();
+        }
+        // 土狼跳逻辑
+        CoyoteJump();
+        // 跳跃预输入逻辑
+        JumpBuffer();
     }
     void FixedUpdate() {
         if (isHurt) return;
         if (isJump) HoldJump();
+        if (isClimb && physicsCheck.isWall) return; //攀爬时不移动
         Move();
     }
     #endregion
@@ -105,9 +116,10 @@ public class PlayerController : MonoBehaviour {
         Vector2.SmoothDamp(rb.position, targetPosition, ref currentVelocity, smoothTime);
         rb.velocity = new Vector2(currentVelocity.x, rb.velocity.y);
         //调整朝向
-        if (currentVelocity.x < 0) transform.localScale = new Vector3(-1, 1, 1);
-        if (currentVelocity.x > 0) transform.localScale = new Vector3(1, 1, 1);
+        if (rb.velocity.x < 0) transform.localScale = new Vector3(-1, 1, 1);
+        if (rb.velocity.x > 0) transform.localScale = new Vector3(1, 1, 1);
     }
+    #region 跳跃相关代码
     //输入跳跃
     void StartJump(InputAction.CallbackContext context) {
         isJump = true;
@@ -118,10 +130,34 @@ public class PlayerController : MonoBehaviour {
         isJump = false;
         holdJumpCounter = 0; // 重置跳跃持续时间计时器
     }
+    //土狼跳
+    void CoyoteJump() {
+        if (physicsCheck.isGround)
+            coyoteTimeCounter = coyoteTime;
+        else
+            coyoteTimeCounter -= Time.deltaTime;
+    }
+    //跳跃预输入
+    void JumpBuffer() {
+        if (jumpBufferCounter > 0) {
+            jumpBufferCounter -= Time.deltaTime;
+            if (physicsCheck.isGround || 
+                coyoteTimeCounter > 0 ||
+                (isClimb && physicsCheck.isWall)) {
+                PerformJump();
+                jumpBufferCounter = 0;
+            }
+        }
+    }
     //执行跳跃
     void PerformJump() {
         rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        if (physicsCheck.isWall) { //蹬墙跳
+            isClimb = false;
+            rb.AddForce(new Vector2(1, 1) * jumpForce, ForceMode2D.Impulse);
+        }
+        else
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         holdJumpCounter = holdJumpTime; // 初始化跳跃持续时间计时器
     }
     //长按跳跃跳得更高
@@ -131,8 +167,43 @@ public class PlayerController : MonoBehaviour {
             holdJumpCounter -= Time.fixedDeltaTime; // 减少跳跃持续时间
         }
     }
+    #endregion
+    #region 攀爬相关代码
+    //输入攀爬
+    private void StartClimb(InputAction.CallbackContext context) {
+        isClimb = true;
+    }
+    //取消攀爬
+    private void CancelClimb(InputAction.CallbackContext context) {
+        isClimb = false;
+        rb.gravityScale = gravityScale; // 恢复重力
+    }
+    //实现攀爬
+    void Climb() {
+        rb.gravityScale = 0; // 禁用重力
+        float verticalInput = inputDirection.y; // 获取垂直输入
+        rb.velocity = new Vector2(0, verticalInput * climbSpeed);
+
+        if (verticalInput != 0) {
+            currentStamina -= Time.deltaTime; // 消耗体力
+        }
+    }
+    //攀爬下滑
+    void SlideDown() {
+        rb.gravityScale = 0; // 禁用重力
+        rb.velocity = new Vector2(rb.velocity.x, -slideSpeed); // 缓慢滑落
+    }
+    //恢复体力
+    void RecoverStamina() {
+        if (rb.gravityScale != gravityScale) 
+            rb.gravityScale = gravityScale; // 恢复重力
+        if (currentStamina < climbStamina && physicsCheck.isGround)
+            currentStamina = climbStamina; // 恢复体力
+    }
+    #endregion
     //冲刺
     void Dash(InputAction.CallbackContext context) {
+        rb.velocity = Vector2.zero; // 清除当前速度
         rb.AddForce(inputDirection * dashForce, ForceMode2D.Impulse);
     }
     //TODO:蹲伏优化
