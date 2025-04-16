@@ -254,9 +254,11 @@ MonoBehaviour:
   holdJumpTime: 0.15
   coyoteTime: 0.1
   jumpBufferTime: 0.1
-  dashForce: 20
+  dashForce: 30
+  dashTime: 0.2
   isJump: 0
   isClimb: 0
+  isDash: 0
   isCrouch: 0
   isHurt: 0
 --- !u!114 &6494721028121412820

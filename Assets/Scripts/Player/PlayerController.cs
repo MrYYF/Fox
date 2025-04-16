@@ -119,8 +119,8 @@ public class PlayerController : MonoBehaviour {
         Vector2.SmoothDamp(rb.position, targetPosition, ref currentVelocity, smoothTime);
         rb.velocity = new Vector2(currentVelocity.x, rb.velocity.y);
         //调整朝向
-        if (rb.velocity.x < 0) transform.localScale = new Vector3(-1, 1, 1);
-        if (rb.velocity.x > 0) transform.localScale = new Vector3(1, 1, 1);
+        if (rb.velocity.x < -0.1) transform.localScale = new Vector3(-1, 1, 1);
+        else if (rb.velocity.x > 0.1) transform.localScale = new Vector3(1, 1, 1);
     }
     #region 跳跃相关代码
     //输入跳跃
@@ -155,12 +155,14 @@ public class PlayerController : MonoBehaviour {
     //执行跳跃
     void PerformJump() {
         rb.velocity = new Vector2(rb.velocity.x, 0);
-        if (physicsCheck.isWall) { //蹬墙跳
-            isClimb = false;
-            rb.AddForce(new Vector2(1, 1) * jumpForce, ForceMode2D.Impulse);
-        }
-        else
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        //蹬墙跳
+        if (isClimb && physicsCheck.isWall)
+            StartCoroutine(TictacTime()); // 启动蹬墙跳时器
+
+        Vector2 jumpDirection = inputDirection.x == -transform.localScale.x ?
+            new Vector2(inputDirection.x, 1) :
+            Vector2.up;
+        rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
         holdJumpCounter = holdJumpTime; // 初始化跳跃持续时间计时器
     }
     //长按跳跃跳得更高
@@ -169,6 +171,13 @@ public class PlayerController : MonoBehaviour {
             rb.AddForce(Vector2.up * holdJumpForce, ForceMode2D.Force);
             holdJumpCounter -= Time.fixedDeltaTime; // 减少跳跃持续时间
         }
+    }
+    //蹬墙跳计时器
+    private IEnumerator TictacTime() {
+        isClimb=false;
+        rb.gravityScale = gravityScale;
+        yield return new WaitForSeconds(0.2f);
+        isClimb = true;
     }
     #endregion
     #region 攀爬相关代码
@@ -211,7 +220,6 @@ public class PlayerController : MonoBehaviour {
         Vector2 dashDirection = inputDirection.Equals(Vector2.zero) ?
             new Vector2(transform.localScale.x, 0) :
             inputDirection;
-        Debug.Log("冲刺方向: " + dashDirection);
         // 清空当前速度
         rb.velocity = Vector2.zero;
         rb.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
