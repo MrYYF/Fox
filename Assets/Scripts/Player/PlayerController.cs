@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("跳跃预输入时间")] public float jumpBufferTime = 0.1f; // 跳跃预输入时间
     float jumpBufferCounter; // 跳跃预输入计时器
     [Tooltip("冲刺推力")] public float dashForce = 10f;
+    [Tooltip("冲刺时间")] public float dashTime = 0.2f; // 冲刺时间
 
 
     /**
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour {
      */
     [HideInInspector] public bool isJump;
     [HideInInspector] public bool isClimb;
+    [HideInInspector] public bool isDash;
     [HideInInspector] public bool isCrouch;
     [HideInInspector] public bool isHurt;
 
@@ -195,16 +198,38 @@ public class PlayerController : MonoBehaviour {
     }
     //恢复体力
     void RecoverStamina() {
-        if (rb.gravityScale != gravityScale) 
-            rb.gravityScale = gravityScale; // 恢复重力
-        if (currentStamina < climbStamina && physicsCheck.isGround)
+        if (physicsCheck.isGround) {
             currentStamina = climbStamina; // 恢复体力
+        }
     }
     #endregion
     //冲刺
     void Dash(InputAction.CallbackContext context) {
-        rb.velocity = Vector2.zero; // 清除当前速度
-        rb.AddForce(inputDirection * dashForce, ForceMode2D.Impulse);
+        if(isDash) return; // 如果正在冲刺，则不执行
+        StartCoroutine(DashTime());
+        // 获取冲刺方向
+        Vector2 dashDirection = inputDirection.Equals(Vector2.zero) ?
+            new Vector2(transform.localScale.x, 0) :
+            inputDirection;
+        Debug.Log("冲刺方向: " + dashDirection);
+        // 清空当前速度
+        rb.velocity = Vector2.zero;
+        rb.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
+        
+    }
+    //冲刺时间
+    private IEnumerator DashTime() {
+        isDash = true;
+        // 禁用重力
+        rb.gravityScale = 0;
+        // 冲刺期间禁用移动
+        playerInputControl.Gameplay.Move.Disable();
+        yield return new WaitForSeconds(dashTime);
+        // 启用移动
+        playerInputControl.Gameplay.Move.Enable();
+        // 恢复重力
+        rb.gravityScale = gravityScale;
+        isDash = false;
     }
     //TODO:蹲伏优化
     //void Crouch()
