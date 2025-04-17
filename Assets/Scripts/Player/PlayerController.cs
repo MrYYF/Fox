@@ -222,8 +222,8 @@ public class PlayerController : MonoBehaviour {
             inputDirection;
         // 清空当前速度
         rb.velocity = Vector2.zero;
+        dashDirection = new Vector2(dashDirection.x, dashDirection.y * 0.5f);
         rb.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
-        
     }
     //冲刺时间
     private IEnumerator DashTime() {
