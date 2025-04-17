@@ -17,10 +17,10 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("移动平滑时间")] public float smoothTime = 0.8f;
     [Tooltip("滑铲速度修正")] public float slideSpeed = 8f;
     [Tooltip("攀爬速度修正")] public float climbSpeed = 3f;
-    public float slideDownSpeed = 2f; // 滑落速度
-    public float climbStamina = 5f; // 攀爬体力
-    private float currentStamina;
-    private float gravityScale = 4f; // 重力
+    [Tooltip("滑落速度")]public float slideDownSpeed = 2f;
+    [Tooltip("攀爬体力")] public float climbStamina = 5f;
+    float currentStamina;
+    float gravityScale = 4f; // 重力
     [Tooltip("滑铲推力")] public float slideForce = 10f;
     [Tooltip("跳跃推力")] public float jumpForce = 10f;
     [Tooltip("持续跳跃推力")] public float holdJumpForce = 40f;
@@ -84,19 +84,6 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         if (isHurt) return;
         inputDirection = playerInputControl.Gameplay.Move.ReadValue<Vector2>(); //获取输入移动向量
-
-        // 攀爬逻辑
-        if (isClimb && physicsCheck.isWall) {
-            if (currentStamina > 0) {
-                Climb();
-            }
-            else {
-                SlideDown();
-            }
-        }
-        else {
-            RecoverStamina();
-        }
         // 土狼跳逻辑
         CoyoteJump();
         // 跳跃预输入逻辑
@@ -105,7 +92,9 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate() {
         if (isHurt) return;
         if (isJump) HoldJump();
-        if (isClimb && physicsCheck.isWall) return; //攀爬时不移动
+        // TODO:爬墙爬到顶端要上平台
+        if (isClimb && physicsCheck.isWall) Climb();
+        RecoverStamina();
         Move();
     }
     #endregion
@@ -194,16 +183,14 @@ public class PlayerController : MonoBehaviour {
     void Climb() {
         rb.gravityScale = 0; // 禁用重力
         float verticalInput = inputDirection.y; // 获取垂直输入
-        rb.velocity = new Vector2(0, verticalInput * climbSpeed);
-
-        if (verticalInput != 0) {
-            currentStamina -= Time.deltaTime; // 消耗体力
+        if (currentStamina > 0) {
+            rb.velocity = new Vector2(0, verticalInput * climbSpeed);
+            if (verticalInput >= 0) 
+                currentStamina -= Time.deltaTime; // 消耗体力
         }
-    }
-    //攀爬下滑
-    void SlideDown() {
-        rb.gravityScale = 0; // 禁用重力
-        rb.velocity = new Vector2(rb.velocity.x, -slideSpeed); // 缓慢滑落
+        else {
+            rb.velocity = new Vector2(0, -slideDownSpeed); // 缓慢滑落
+        }
     }
     //恢复体力
     void RecoverStamina() {
