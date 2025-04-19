@@ -247,7 +247,7 @@ MonoBehaviour:
   slideSpeed: 0
   climbSpeed: 3
   slideDownSpeed: 2
-  climbStamina: 5
+  climbStamina: 3
   slideForce: 0
   jumpForce: 10
   holdJumpForce: 40

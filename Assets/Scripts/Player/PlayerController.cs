@@ -88,14 +88,17 @@ public class PlayerController : MonoBehaviour {
         CoyoteJump();
         // 跳跃预输入逻辑
         JumpBuffer();
+        // 恢复体力逻辑
+        RecoverStamina();
     }
     void FixedUpdate() {
         if (isHurt) return;
         if (isJump) HoldJump();
-        // TODO:爬墙爬到顶端要上平台
+        // TODO:后续用状态机优化攀爬状态和移动状态的切换
         if (isClimb && physicsCheck.isWall) Climb();
-        RecoverStamina();
-        Move();
+        else Move();
+        ClimbUp();
+        
     }
     #endregion
 
@@ -192,6 +195,20 @@ public class PlayerController : MonoBehaviour {
             rb.velocity = new Vector2(0, -slideDownSpeed); // 缓慢滑落
         }
     }
+    //攀登上平台
+    void ClimbUp() {
+        if (rb.gravityScale == 0 && isClimb && !physicsCheck.isWall) {
+            StartCoroutine(ClimbUpAction());
+        }
+    }
+    IEnumerator ClimbUpAction() {
+        isClimb = false; // 取消攀爬状态
+        rb.gravityScale = gravityScale; // 恢复重力
+        PerformJump();
+        yield return new WaitForSeconds(0.1f);
+        rb.AddForce(new Vector2(transform.localScale.x,0) * jumpForce * 0.5f, ForceMode2D.Impulse);
+        isClimb = true; // 重新进入攀爬状态
+    }
     //恢复体力
     void RecoverStamina() {
         if (physicsCheck.isGround) {
@@ -215,6 +232,8 @@ public class PlayerController : MonoBehaviour {
     //冲刺时间
     private IEnumerator DashTime() {
         isDash = true;
+        bool temp = isClimb;
+        isClimb = false;
         // 禁用重力
         rb.gravityScale = 0;
         // 冲刺期间禁用移动
@@ -224,6 +243,7 @@ public class PlayerController : MonoBehaviour {
         playerInputControl.Gameplay.Move.Enable();
         // 恢复重力
         rb.gravityScale = gravityScale;
+        isClimb = temp;
         isDash = false;
     }
     //TODO:蹲伏优化
