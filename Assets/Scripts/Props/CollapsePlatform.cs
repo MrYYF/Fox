@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class CollapseController : MonoBehaviour
+public class CollapsePlatform : MonoBehaviour
 {
     [Tooltip("消失时间")] public float fadeTime = 1f;
     [Tooltip("恢复时间")] public float respawnTime = 1f;

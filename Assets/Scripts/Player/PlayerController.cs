@@ -216,6 +216,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
     #endregion
+    #region 冲刺相关代码
     //冲刺
     void Dash(InputAction.CallbackContext context) {
         if(isDash) return; // 如果正在冲刺，则不执行
@@ -246,6 +247,7 @@ public class PlayerController : MonoBehaviour {
         isClimb = temp;
         isDash = false;
     }
+    #endregion
     //TODO:蹲伏优化
     //void Crouch()
     //{
