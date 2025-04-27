@@ -5,45 +5,19 @@ public class MoveablePlatform : MonoBehaviour {
 
     [Tooltip("平台起点")] public Transform startPoint;
     [Tooltip("平台终点")] public Transform endPoint;
-    [Tooltip("移动时间")] public float moveTime = 2f;
+    [Tooltip("移动速度")] public float dashSpeed = 2f;
+    [Tooltip("移动速度")] public float returnSpeed = 2f;
     [Tooltip("停留时间")] public float waitTime = 1f;
 
     private bool isMoving = false;
     private bool isPlayerOnPlatform = false; // 记录玩家是否在平台上
-    private Vector2 currentVelocity = Vector2.zero; // 平台当前速度
+    private Vector2 currentVelocity; // 平台当前速度
     private Vector2 targetPosition; // 当前目标位置
 
     private void Start() {
         startPoint.position = transform.position;
-        targetPosition = endPoint.position; // 初始目标为终点
-    }
-
-    private void FixedUpdate() {
-        if (isMoving) {
-            // 使用 SmoothDamp 平滑移动平台
-            Vector2 newPosition = Vector2.SmoothDamp(transform.position, targetPosition, ref currentVelocity, moveTime);
-            Debug.Log(currentVelocity);
-            transform.position = newPosition;
-
-            // 检查是否到达目标点
-            if (Vector2.Distance(transform.position, targetPosition) < 0.1f) {
-                if (targetPosition == (Vector2)endPoint.position) {
-                    // 到达终点，切换到起点
-                    StartCoroutine(WaitAndSwitchTarget(startPoint.position));
-                }
-                else {
-                    // 到达起点，切换到终点
-                    StartCoroutine(WaitAndSwitchTarget(endPoint.position));
-                }
-            }
-        }
-    }
-
-    private IEnumerator WaitAndSwitchTarget(Vector2 newTarget) {
-        isMoving = false; // 暂停移动
-        yield return new WaitForSeconds(waitTime); // 等待一段时间
-        targetPosition = newTarget; // 切换目标位置
-        isMoving = true; // 继续移动
+        targetPosition = endPoint.position;
+        currentVelocity = Vector2.zero;
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -52,7 +26,7 @@ public class MoveablePlatform : MonoBehaviour {
             isPlayerOnPlatform = true; // 标记玩家在平台上
 
             if (!isMoving) {
-                isMoving = true; // 启动平台移动
+                StartCoroutine(DashToEndPoint());
             }
         }
     }
@@ -67,6 +41,51 @@ public class MoveablePlatform : MonoBehaviour {
             if (playerRb != null) {
                 playerRb.velocity += currentVelocity * 2f; // 将平台的速度加到玩家的速度上
             }
+        }
+    }
+
+    // 移动到终点
+    private IEnumerator DashToEndPoint() {
+        isMoving = true;
+        targetPosition = endPoint.position; // 切换目标位置
+        yield return new WaitForSeconds(waitTime); // 等待一段时间
+        currentVelocity = (endPoint.position - startPoint.position).normalized * dashSpeed;
+
+        while (Vector2.Distance(transform.position, targetPosition) > 0.1f) {
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, targetPosition, dashSpeed * Time.fixedDeltaTime);
+            transform.position = newPosition;
+            yield return new WaitForFixedUpdate();
+        }
+
+        StartCoroutine(ReturnToStartPoint());
+        yield return new WaitForSeconds(0.1f);
+        currentVelocity = Vector2.zero;
+    }
+
+    // 返回起点
+    private IEnumerator ReturnToStartPoint() {
+        targetPosition = startPoint.position; // 切换目标位置
+        yield return new WaitForSeconds(waitTime); // 等待一段时间
+        currentVelocity = (startPoint.position - endPoint.position).normalized * returnSpeed;
+
+        while (Vector2.Distance(transform.position, targetPosition) > 0.1f) {
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, targetPosition, returnSpeed * Time.fixedDeltaTime);
+            transform.position = newPosition;
+            yield return new WaitForFixedUpdate();
+        }
+
+        if (isPlayerOnPlatform) {
+            StartCoroutine(DashToEndPoint());
+        }
+        yield return new WaitForSeconds(0.1f);
+        currentVelocity = Vector2.zero;
+        isMoving = false;
+    }
+
+    private void OnDrawGizmosSelected() {
+        if (endPoint != null) {
+            Gizmos.color = Color.green; // 设置连线颜色为绿色
+            Gizmos.DrawLine(transform.position, endPoint.position); // 绘制连线
         }
     }
 }
