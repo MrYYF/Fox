@@ -169,6 +169,7 @@ public class PlayerController : MonoBehaviour {
         isClimb=false;
         rb.gravityScale = gravityScale;
         yield return new WaitForSeconds(0.2f);
+        //TODO:爬墙状态下跳跃后快速松开攀爬键会导致角色一直处于攀爬状态
         isClimb = true;
     }
     #endregion
@@ -192,12 +193,13 @@ public class PlayerController : MonoBehaviour {
                 currentStamina -= Time.deltaTime; // 消耗体力
         }
         else {
+            //TODO:缓慢滑落需要进行墙体检测，否则虚空下滑
             rb.velocity = new Vector2(0, -slideDownSpeed); // 缓慢滑落
         }
     }
     //攀登上平台
     void ClimbUp() {
-        if (rb.gravityScale == 0 && isClimb && !physicsCheck.isWall) {
+        if (rb.gravityScale == 0 && isClimb && !physicsCheck.isWall && rb.velocity.y > 0) {
             StartCoroutine(ClimbUpAction());
         }
     }

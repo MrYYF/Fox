@@ -39,7 +39,8 @@ public class MoveablePlatform : MonoBehaviour {
             // 将平台的动量传递给玩家
             Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (playerRb != null) {
-                playerRb.velocity += currentVelocity * 2f; // 将平台的速度加到玩家的速度上
+                currentVelocity.y = Mathf.Max(currentVelocity.y, 0); // 确保平台的速度不为负值
+                playerRb.velocity += currentVelocity; // 将平台的速度加到玩家的速度上
             }
         }
     }
@@ -64,6 +65,7 @@ public class MoveablePlatform : MonoBehaviour {
 
     // 返回起点
     private IEnumerator ReturnToStartPoint() {
+        //TODO:返回时如果断触或触碰似乎会导致重新冲刺到终点
         targetPosition = startPoint.position; // 切换目标位置
         yield return new WaitForSeconds(waitTime); // 等待一段时间
         currentVelocity = (startPoint.position - endPoint.position).normalized * returnSpeed;
