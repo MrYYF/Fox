@@ -470,8 +470,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 223350139}
-  - component: {fileID: 223350138}
   - component: {fileID: 223350137}
+  - component: {fileID: 223350138}
   - component: {fileID: 223350136}
   m_Layer: 0
   m_Name: AudioManager
@@ -492,8 +492,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f85684190aace4691460cdc9d71e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGMSource: {fileID: 223350138}
+  FXEvent: {fileID: 11400000, guid: 60b5831df0f98be49aae80b35aeefa30, type: 2}
+  BGMEvent: {fileID: 11400000, guid: 254f34298bdae7a4c98706e6c14872b5, type: 2}
   FXSource: {fileID: 223350137}
+  BGMSource: {fileID: 223350138}
 --- !u!82 &223350137
 AudioSource:
   m_ObjectHideFlags: 0
@@ -604,7 +606,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5514,6 +5516,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6161011168891481250, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: audioClip.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6161011168891481250, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: audioClip.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+    - target: {fileID: 6161011168891481250, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
+      propertyPath: audioClip.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
     - target: {fileID: 7621529003363563313, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6

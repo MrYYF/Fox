@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -41,6 +40,7 @@ public class PlayerController : MonoBehaviour {
     Vector2 inputDirection; //输入方向
     PhysicsCheck physicsCheck; //物理检测类
     Rigidbody2D rb;
+    AudioDefination audioDefination; //音效类
     //CapsuleCollider2D col;
 
     /**
@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour {
 
         rb = GetComponent<Rigidbody2D>();
         physicsCheck = GetComponent<PhysicsCheck>();
+        audioDefination = GetComponent<AudioDefination>();
         playerInputControl = new PlayerInputControl();
         playerInputControl.Gameplay.Jump.started += StartJump;
         playerInputControl.Gameplay.Jump.canceled += CancelJump;
@@ -155,6 +156,7 @@ public class PlayerController : MonoBehaviour {
             new Vector2(inputDirection.x, 1) :
             Vector2.up;
         rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
+        audioDefination.PlayAudio(0);
         holdJumpCounter = holdJumpTime; // 初始化跳跃持续时间计时器
     }
     //长按跳跃跳得更高
@@ -228,9 +230,10 @@ public class PlayerController : MonoBehaviour {
             new Vector2(transform.localScale.x, 0) :
             inputDirection;
         // 清空当前速度
-        rb.velocity = Vector2.zero;
+        rb.velocity = new Vector2(rb.velocity.x, 0);
         dashDirection = new Vector2(dashDirection.x, dashDirection.y * 0.5f);
         rb.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
+        audioDefination.PlayAudio(1);
     }
     //冲刺时间
     private IEnumerator DashTime() {
