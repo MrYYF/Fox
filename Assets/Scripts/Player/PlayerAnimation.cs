@@ -28,8 +28,10 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool("isDead", character.isDead);
     }
 
+    // TODO: 考虑将其移动到Character中？因为受伤触发音效动画是通用逻辑
     public void Hurt()
     {
+        // TODO: 受伤时触发音效
         animator.SetTrigger("hurt");
     }
 }

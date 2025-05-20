@@ -275,9 +275,13 @@ public class PlayerController : MonoBehaviour {
     #endregion
 
     //受伤弹开
+    // TODO: 考虑将其移动到Character中？因为受伤触发音效动画是通用逻辑？
+    // TODO: 将动画和音效的触发全都放入同一个方法中触发，这样调用受伤只需一次即可，不需要额外调用动画、音效
     public void GetHurt(Vector2 bounceDirection) {
         isHurt = true;
         // TODO: 根据接触点弹开
+        // TODO: 受伤时触发音效
+        // TODO: 受伤时触发动画
         rb.velocity = Vector2.zero;
         rb.AddForce(bounceDirection.normalized * jumpForce, ForceMode2D.Impulse);
     }
