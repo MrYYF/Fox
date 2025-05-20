@@ -296,5 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4532e9a28bfd6454cbb173f71716ba0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+  audioClip:
+  - {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+  - {fileID: 8300000, guid: b99da9a57308d4ba1bee1cf1d9038376, type: 3}
   playAudioEventSO: {fileID: 11400000, guid: 60b5831df0f98be49aae80b35aeefa30, type: 2}

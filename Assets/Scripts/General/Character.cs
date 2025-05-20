@@ -69,7 +69,7 @@ public class Character : MonoBehaviour
         }
     }
     //触发无敌状态
-    private void TriggerInvulnerable()
+    void TriggerInvulnerable()
     {
         isInvulnerable = true;
         invulnerableCounter = invulnerableDuration; //重置计时器

@@ -274,15 +274,11 @@ public class PlayerController : MonoBehaviour {
     //}
     #endregion
 
-
-
-
     //受伤弹开
-    public void GetHurt(Transform attacker) {
+    public void GetHurt(Vector2 bounceDirection) {
         isHurt = true;
         // TODO: 根据接触点弹开
         rb.velocity = Vector2.zero;
-        Vector2 direction = new Vector2(transform.position.x - attacker.position.x, 0.3f).normalized;
-        rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(bounceDirection.normalized * jumpForce, ForceMode2D.Impulse);
     }
 }

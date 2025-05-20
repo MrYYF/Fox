@@ -8,14 +8,14 @@ public class CollapsePlatform : MonoBehaviour
     [Tooltip("恢复时间")] public float respawnTime = 1f;
     
 
-    private Collider2D collider2D;
+    private Collider2D platformCollider;
     private SpriteRenderer spriteRenderer;
     private bool isCollapsing = false; //是否触发
     [Tooltip("闪烁次数")] private int blinkCount = 5;
 
     private void Awake()
     {
-        collider2D = GetComponent<Collider2D>();
+        platformCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -54,12 +54,12 @@ public class CollapsePlatform : MonoBehaviour
         }
 
         spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
-        collider2D.enabled = false; // Disable the collider
+        platformCollider.enabled = false; // Disable the collider
 
         yield return new WaitForSeconds(respawnTime);
 
         spriteRenderer.color = originalColor;
-        collider2D.enabled = true; // Re-enable the collider
+        platformCollider.enabled = true; // Re-enable the collider
         isCollapsing = false; // Reset the flag
     }
 }
