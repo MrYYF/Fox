@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -6,10 +5,10 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-1)]
 public class SaveManager : Singleton<SaveManager>
 {
+    // TODO: 用SO存储数据
     PlayerInputControl playerInputControl; //输入系统
-    GameObject playerPrefab; //玩家预制体
-    CheckPoint currentCheckPoint; //当前存档点
-    Transform spawnPoint; //重生点
+    public CheckPoint currentCheckPoint; //当前存档点
+    public Transform spawnPoint; //重生点
 
     protected override void Awake() {
         base.Awake();
@@ -27,12 +26,22 @@ public class SaveManager : Singleton<SaveManager>
 
     // 重新加载当前场景
     private void Restart(InputAction.CallbackContext context) {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // 删除当前玩家
+        GameManager.Instance.DestroyPlayer();
+        // 在当前存档点重生
+        GameManager.Instance.CreatePlayer(spawnPoint.position);
+
         Debug.Log("Restarting level...");
     }
 
     // internal关键字
-    internal void SetCheckPoint(Vector3 position) {
-        spawnPoint.position = position;
+    internal void SetCheckPoint(CheckPoint checkPoint) {
+        currentCheckPoint = checkPoint;
+        spawnPoint.position = checkPoint.spawnPoint.position;
     }
+
+    public void ReloadScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour
 {
     [Tooltip("重生位置")]public Transform spawnPoint;
-    [Tooltip("触发区域")] public Collider2D checkPointArea;
+    [Tooltip("触发区域")]public Collider2D checkPointArea;
 
     private bool isStayInCheckPointArea; //是否处于触发区域
     private bool isUsed; //检查点是否已使用
@@ -15,7 +15,7 @@ public class CheckPoint : MonoBehaviour
     //调用SaveManager，将当前存档点设置为当前存档点
     public void SetCheckPoint() {
         if (isStayInCheckPointArea) {
-            SaveManager.Instance.SetCheckPoint(spawnPoint.position);
+            SaveManager.Instance.SetCheckPoint(this);
             Debug.Log("存档点已设置为: " + spawnPoint.position);
         }
     }

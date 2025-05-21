@@ -57,8 +57,6 @@ public class PlayerController : MonoBehaviour {
     #region 生命周期函数
     //初始化组件
     void Awake() {
-        GameManager.Instance.RigisterPlayer(gameObject); //注册玩家到游戏管理器
-
         rb = GetComponent<Rigidbody2D>();
         physicsCheck = GetComponent<PhysicsCheck>();
         audioDefination = GetComponent<AudioDefination>();
@@ -76,6 +74,7 @@ public class PlayerController : MonoBehaviour {
         playerInputControl?.Disable();
     }
     void Start() {
+        GameManager.Instance.RigisterPlayer(gameObject); //注册玩家到游戏管理器
         currentSpeed = normalSpeed;
         coyoteTimeCounter = coyoteTime;
         gravityScale = rb.gravityScale;
