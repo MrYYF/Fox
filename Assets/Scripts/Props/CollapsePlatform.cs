@@ -34,7 +34,6 @@ public class CollapsePlatform : MonoBehaviour
 
     private IEnumerator Collapse()
     {
-        Debug.Log("Collapse triggered");
         isCollapsing = true; // Set the flag to true
 
         float elapsedTime = 0f;

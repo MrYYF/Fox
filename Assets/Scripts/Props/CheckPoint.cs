@@ -16,7 +16,6 @@ public class CheckPoint : MonoBehaviour
     public void SetCheckPoint() {
         if (isStayInCheckPointArea) {
             SaveManager.Instance.SetCheckPoint(this);
-            Debug.Log("存档点已设置为: " + spawnPoint.position);
         }
     }
     
