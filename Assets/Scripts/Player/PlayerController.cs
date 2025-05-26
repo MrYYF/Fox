@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour {
     [Tooltip("攀爬体力")] public float climbStamina = 5f;
     float currentStamina;
     float gravityScale = 4f; // 重力
-    [Tooltip("滑铲推力")] public float slideForce = 10f;
+    //[Tooltip("滑铲推力")] public float slideForce = 10f;
+    [Header("跳跃相关数值")]
     [Tooltip("跳跃推力")] public float jumpForce = 10f;
     [Tooltip("持续跳跃推力")] public float holdJumpForce = 40f;
     [Tooltip("持续跳跃推力时间")] public float holdJumpTime = 0.15f;
@@ -29,8 +30,11 @@ public class PlayerController : MonoBehaviour {
     float coyoteTimeCounter; //土狼跳计时器
     [Tooltip("跳跃预输入时间")] public float jumpBufferTime = 0.1f; // 跳跃预输入时间
     float jumpBufferCounter; // 跳跃预输入计时器
+    [Header("冲刺相关数值")]
+    [Tooltip("冲刺次数")] public int dashCount = 1;
+    public int currentDashCount;
     [Tooltip("冲刺推力")] public float dashForce = 10f;
-    [Tooltip("冲刺时间")] public float dashTime = 0.2f; // 冲刺时间
+    [Tooltip("冲刺时间")] public float dashTime = 0.15f; // 冲刺时间
 
 
     /**
@@ -80,6 +84,7 @@ public class PlayerController : MonoBehaviour {
         gravityScale = rb.gravityScale;
         jumpBufferCounter = 0;
         holdJumpCounter = 0;
+        currentDashCount = dashCount;
     }
     void Update() {
         if (isHurt) return;
@@ -90,6 +95,8 @@ public class PlayerController : MonoBehaviour {
         JumpBuffer();
         // 恢复体力逻辑
         RecoverStamina();
+        // 恢复冲刺次数
+        RecoverDashCount();
     }
     void FixedUpdate() {
         if (isHurt) return;
@@ -222,7 +229,8 @@ public class PlayerController : MonoBehaviour {
     #region 冲刺相关代码
     //冲刺
     void Dash(InputAction.CallbackContext context) {
-        if(isDash) return; // 如果正在冲刺，则不执行
+        if(isDash || currentDashCount<1) return; // 如果正在冲刺，则不执行
+        
         StartCoroutine(DashTime());
         // 获取冲刺方向
         Vector2 dashDirection = inputDirection.Equals(Vector2.zero) ?
@@ -235,22 +243,29 @@ public class PlayerController : MonoBehaviour {
         audioDefination.PlayAudio(1);
     }
     //冲刺时间
-    private IEnumerator DashTime() {
+    IEnumerator DashTime() {
         isDash = true;
+        currentDashCount--; // 减少冲刺次数
         bool temp = isClimb;
         isClimb = false;
-        // 禁用重力
-        rb.gravityScale = 0;
-        // 冲刺期间禁用移动
-        playerInputControl.Gameplay.Move.Disable();
+        rb.gravityScale = 0; // 禁用重力
+        currentSpeed = 0; // 冲刺期间禁用移动
+
         yield return new WaitForSeconds(dashTime);
-        // 启用移动
-        playerInputControl.Gameplay.Move.Enable();
-        // 恢复重力
-        rb.gravityScale = gravityScale;
+
+        
+        currentSpeed = normalSpeed; // 启用移动
+        rb.gravityScale = gravityScale; // 恢复重力
         isClimb = temp;
         isDash = false;
     }
+    //恢复冲刺次数
+    public void RecoverDashCount() {
+        if (physicsCheck.isGround) {
+            currentDashCount = dashCount; // 恢复冲刺次数
+        }
+    }
+
     #endregion
     //TODO:蹲伏优化
     //void Crouch()
