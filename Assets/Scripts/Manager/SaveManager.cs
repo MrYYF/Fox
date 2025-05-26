@@ -29,15 +29,19 @@ public class SaveManager : Singleton<SaveManager>
         // 删除当前玩家
         GameManager.Instance.DestroyPlayer();
         // 在当前存档点重生
-        GameManager.Instance.CreatePlayer(spawnPoint.position);
+        GameManager.Instance.CreatePlayer(currentCheckPoint.spawnPoint.position);
 
         Debug.Log("Restarting level...");
     }
 
     // internal关键字
     internal void SetCheckPoint(CheckPoint checkPoint) {
-        currentCheckPoint = checkPoint;
-        spawnPoint.position = checkPoint.spawnPoint.position;
+        Debug.Log($"Setting checkpoint: {checkPoint.name} at position {checkPoint.spawnPoint.position}");
+        if(currentCheckPoint != null && checkPoint != currentCheckPoint) {
+            currentCheckPoint.isUsed = false; // 设置之前的存档点未使用
+            checkPoint.isUsed = true; // 设置当前存档点为已使用
+            currentCheckPoint = checkPoint;
+        }
     }
 
     public void ReloadScene() {

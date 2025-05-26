@@ -7,9 +7,9 @@ public class CheckPoint : MonoBehaviour
 {
     [Tooltip("重生位置")]public Transform spawnPoint;
     [Tooltip("触发区域")]public Collider2D checkPointArea;
+    [Tooltip("检查点是否已使用")]public bool isUsed;
 
     private bool isStayInCheckPointArea; //是否处于触发区域
-    private bool isUsed; //检查点是否已使用
 
 
     //调用SaveManager，将当前存档点设置为当前存档点
@@ -20,7 +20,7 @@ public class CheckPoint : MonoBehaviour
     }
     
     private void OnTriggerEnter2D(Collider2D collision) {
-        if(collision.CompareTag("Player")) {
+        if(collision.CompareTag("Player") && !isUsed) {
             isStayInCheckPointArea = true;
             SetCheckPoint();
             //TODO: UI显示
