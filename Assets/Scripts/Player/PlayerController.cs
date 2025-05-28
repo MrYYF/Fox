@@ -95,8 +95,6 @@ public class PlayerController : MonoBehaviour {
         JumpBuffer();
         // 恢复体力逻辑
         RecoverStamina();
-        // 恢复冲刺次数
-        RecoverDashCount();
     }
     void FixedUpdate() {
         if (isHurt) return;
@@ -223,13 +221,15 @@ public class PlayerController : MonoBehaviour {
     void RecoverStamina() {
         if (physicsCheck.isGround) {
             currentStamina = climbStamina; // 恢复体力
+            if(!isDash)currentDashCount = dashCount; // 恢复冲刺次数
         }
     }
     #endregion
     #region 冲刺相关代码
     //冲刺
     void Dash(InputAction.CallbackContext context) {
-        if(isDash || currentDashCount<1) return; // 如果正在冲刺，则不执行
+        // 如果正在冲刺，则不执行
+        if (isDash || currentDashCount<1) return; 
         
         StartCoroutine(DashTime());
         // 获取冲刺方向
@@ -261,9 +261,7 @@ public class PlayerController : MonoBehaviour {
     }
     //恢复冲刺次数
     public void RecoverDashCount() {
-        if (physicsCheck.isGround) {
-            currentDashCount = dashCount; // 恢复冲刺次数
-        }
+        currentDashCount = dashCount; // 恢复冲刺次数
     }
 
     #endregion
