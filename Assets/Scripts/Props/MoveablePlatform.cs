@@ -8,6 +8,7 @@ public class MoveablePlatform : MonoBehaviour {
     [Tooltip("移动速度")] public float dashSpeed = 2f;
     [Tooltip("移动速度")] public float returnSpeed = 2f;
     [Tooltip("停留时间")] public float waitTime = 1f;
+    [Tooltip("是否触发式")] public bool isTrigger = false;
 
     private bool isMoving = false;
     private bool isPlayerOnPlatform = false; // 记录玩家是否在平台上
@@ -20,12 +21,19 @@ public class MoveablePlatform : MonoBehaviour {
         currentVelocity = Vector2.zero;
     }
 
+    private void FixedUpdate() {
+        if (!isTrigger && !isMoving) {
+            Debug.Log("触发FixedUpdate移动!");
+            StartCoroutine(DashToEndPoint());
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Player")) {
             collision.transform.SetParent(transform); // 将玩家设置为平台的子对象
             isPlayerOnPlatform = true; // 标记玩家在平台上
 
-            if (!isMoving) {
+            if (isTrigger && !isMoving) {
                 StartCoroutine(DashToEndPoint());
             }
         }
@@ -76,10 +84,10 @@ public class MoveablePlatform : MonoBehaviour {
             yield return new WaitForFixedUpdate();
         }
 
-        if (isPlayerOnPlatform) {
+        if (isTrigger && isPlayerOnPlatform) {
             StartCoroutine(DashToEndPoint());
         }
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(waitTime);
         currentVelocity = Vector2.zero;
         isMoving = false;
     }
