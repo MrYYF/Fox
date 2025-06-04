@@ -6,6 +6,8 @@ using UnityEngine;
 public class Gem : MonoBehaviour
 {
     [Tooltip("消失时间")] public float respawnDelay = 5f;
+    [Tooltip("拾取音效")] public AudioClip pickUpSound;
+    [Tooltip("音频播放事件")]public PlayAudioEventSO playAudioEventSO;
     private Animator animator;
     private Collider2D col;
     private SpriteRenderer sr;
@@ -24,6 +26,7 @@ public class Gem : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.CompareTag("Player")) {
+            playAudioEventSO.OnEventRaised(pickUpSound); // 播放拾取音效
             animator.SetTrigger("PickUp");
             col.enabled = false; // 防止重复触发
             collision.GetComponent<PlayerController>()?.RecoverDashCount();

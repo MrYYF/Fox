@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ddb9cef5f035ca46b8c3100ecc5b0b5, type: 3}
-  m_Name: BFMAudioEvent
+  m_Name: BGMAudioEvent
   m_EditorClassIdentifier: 

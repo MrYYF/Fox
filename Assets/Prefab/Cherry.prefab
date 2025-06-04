@@ -165,3 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5aa5dd263edabd448170a3f4d897b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickUpSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  playAudioEventSO: {fileID: 11400000, guid: 60b5831df0f98be49aae80b35aeefa30, type: 2}
+  collectionEventSO: {fileID: 11400000, guid: 7e532466ebe7350458bb292131e805e9, type: 2}

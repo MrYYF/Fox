@@ -165,3 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6018c423de6a24a968307dd4677638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnDelay: 5
+  pickUpSound: {fileID: 8300000, guid: 35fbad8cdde724f11ba6481f1e64af71, type: 3}
+  playAudioEventSO: {fileID: 11400000, guid: 60b5831df0f98be49aae80b35aeefa30, type: 2}
