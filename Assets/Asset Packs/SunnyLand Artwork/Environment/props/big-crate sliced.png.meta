@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ecc204495234d40f091d828790c56287
+guid: 3fc2bbd409bf34ab6af1637bab569da1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,22 +123,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bush_0
+      name: big-crate_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 46
-        height: 28
-      alignment: 9
-      pivot: {x: 0.5, y: 0.275}
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc15579dad8127d489e46c93c4d7a878
-      internalID: -1542789745
+      spriteID: f9a769f266cddc34fb8df415ebf4dac0
+      internalID: -1961157560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big-crate_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a39b38279b790e146b70b407926f955e
+      internalID: -931893219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big-crate_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66d3bfadb393e7e44b82421a5c30d4a9
+      internalID: 982396856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: big-crate_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81bad1270ed94bc4594583f713421da0
+      internalID: -500361307
       vertices: []
       indices: 
       edges: []
@@ -154,7 +217,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bush_0: -1542789745
+      big-crate_0: -1961157560
+      big-crate_1: -931893219
+      big-crate_2: 982396856
+      big-crate_3: -500361307
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
