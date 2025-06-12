@@ -1,8 +1,8 @@
 using UnityEngine;
 
-/**
- * 挂载到存档点，用于调用存档点的相关方法
- */
+/// <summary>
+/// 挂载到存档点，用于调用存档点的相关方法
+/// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
 public class CheckPoint : MonoBehaviour {
     [Tooltip("重生位置")] public Transform spawnPoint;
@@ -18,14 +18,14 @@ public class CheckPoint : MonoBehaviour {
 
     private void Start() {
         if (isInitialCheckPoint) {
-            SaveManager.Instance.SetCheckPoint(this); // 如果是初始检查点，设置为当前存档点
+            SenceSaveManager.Instance.SetCheckPoint(this); // 如果是初始检查点，设置为当前存档点
         }
     }
 
 
-    //调用SaveManager，将当前存档点设置为当前存档点
+    //SenceSaveManager，将当前存档点设置为当前存档点
     public void SetThisCheckPoint() {
-        SaveManager.Instance.SetCheckPoint(this);
+        SenceSaveManager.Instance.SetCheckPoint(this);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

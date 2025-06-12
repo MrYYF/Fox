@@ -6,6 +6,7 @@ public enum GameState
     GameOver
 }
 
-public enum Scenes {
-
+public enum SceneType {
+    GameScene,
+    MenuScene,
 }

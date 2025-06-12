@@ -12,11 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Prefabs
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: Prefabs
   m_Data:
     m_SerializedData: []
   m_GUID: 817bf1a006cc97e4d873bbfa50f3201d
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 32c2041f4f823984eab6f70b3d754e65
+    m_Address: CheckPoint
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2463ceb1ddd50a74e8f802f70f37b99b
+    m_Address: Cherry
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fea19fb32c2ba4548a9bd32ad7b336e0
+    m_Address: CollapsePlatform
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06b543aeabcc1404882722d946ee6b03
+    m_Address: Gem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a5a2b883229f3a4e94950f918c4bd6b
+    m_Address: MoveablePlatform
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3b8851608f5b384f92f9b77a1e0eb25
+    m_Address: Player
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b54dd01a32e54f44a9cf1b444f9df14
+    m_Address: Slimer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 832ba77db6ab8074fa755601f4ab986e, type: 2}
   m_SchemaSet:

@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 1273497980}
   - component: {fileID: 1273497979}
   m_Layer: 0
-  m_Name: SaveManager
+  m_Name: SenceSaveManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -796,8 +796,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7eb4d3836e96dd4ab9d1e2862434bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSceneSO: {fileID: 11400000, guid: 130a5a400361db34684cf1c793411bee, type: 2}
   currentCheckPoint: {fileID: 0}
   spawnPoint: {fileID: 0}
+  temporarySave: 0
 --- !u!4 &1273497980
 Transform:
   m_ObjectHideFlags: 0
