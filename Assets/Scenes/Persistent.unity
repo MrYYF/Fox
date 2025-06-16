@@ -796,10 +796,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7eb4d3836e96dd4ab9d1e2862434bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneSO: {fileID: 11400000, guid: 130a5a400361db34684cf1c793411bee, type: 2}
+  senceLoadEvent: {fileID: 11400000, guid: 9aa11e46dc413cd41961d99a3437cffc, type: 2}
+  firstGameSceneData: {fileID: 11400000, guid: 6916f0551111ecd44b2f88555f7e6531, type: 2}
+  currentGameSceneData: {fileID: 11400000, guid: 6916f0551111ecd44b2f88555f7e6531, type: 2}
+  nextGameSceneData: {fileID: 11400000, guid: 130a5a400361db34684cf1c793411bee, type: 2}
   currentCheckPoint: {fileID: 0}
-  spawnPoint: {fileID: 0}
   temporarySave: 0
+  fadeDuration: 1
 --- !u!4 &1273497980
 Transform:
   m_ObjectHideFlags: 0
@@ -1107,7 +1110,7 @@ Transform:
   m_GameObject: {fileID: 1685421139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -41, y: 2.25, z: -10}
+  m_LocalPosition: {x: 3.25, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1227,7 +1230,7 @@ Transform:
   m_GameObject: {fileID: 1685589259}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -41, y: 2.25, z: -10}
+  m_LocalPosition: {x: 3.25, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1514,11 +1517,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7621529003363563313, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -41
+      value: 3.25
       objectReference: {fileID: 0}
     - target: {fileID: 7621529003363563313, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.25
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7621529003363563313, guid: d3b8851608f5b384f92f9b77a1e0eb25, type: 3}
       propertyPath: m_LocalPosition.z

@@ -23,7 +23,6 @@ public class MoveablePlatform : MonoBehaviour {
 
     private void FixedUpdate() {
         if (!isTrigger && !isMoving) {
-            Debug.Log("¥•∑¢FixedUpdate“∆∂Ø!");
             StartCoroutine(DashToEndPoint());
         }
     }

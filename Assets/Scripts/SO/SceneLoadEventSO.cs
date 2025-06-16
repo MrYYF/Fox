@@ -7,7 +7,7 @@ using UnityEngine.Events;
 /// 用于触发场景加载事件的ScriptableObject
 /// </summary>
 [CreateAssetMenu(fileName = "SenceLoadEvent", menuName = "Event/SenceLoadEventSO")]
-public class SenceLoadEventSO : ScriptableObject {
+public class SceneLoadEventSO : ScriptableObject {
     public UnityAction<GameSceneDataSO> OnEventRaised;
 
     public void RaiseEvent(GameSceneDataSO gameSceneDataSO) {

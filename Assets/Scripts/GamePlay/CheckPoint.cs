@@ -8,6 +8,9 @@ public class CheckPoint : MonoBehaviour {
     [Tooltip("重生位置")] public Transform spawnPoint;
     [Tooltip("检查点是否已使用")] public bool isUsed;
     [Tooltip("是否初始检查点")] public bool isInitialCheckPoint;
+    [Tooltip("是否传送点")] public bool isPortal;
+    public GameSceneDataSO gameSceneData; // 关联的场景数据
+    public SceneLoadEventSO sceneLoadEvent;
 
     private Collider2D checkPointArea; // 存档点触发器区域
 
@@ -34,6 +37,10 @@ public class CheckPoint : MonoBehaviour {
             //TODO: UI显示
             //TODO: 粒子效果播放
             //TODO: 音效播放
+        }
+
+        if (isPortal) {
+            sceneLoadEvent.RaiseEvent(gameSceneData); // 如果是传送点，触发场景加载事件
         }
     }
 

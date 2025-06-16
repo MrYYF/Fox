@@ -10,5 +10,4 @@ public class GameSceneDataSO : ScriptableObject {
     [Header("Basic Information")]
     [Tooltip("场景类型")]public SceneType scenes;
     [Tooltip("场景资产引用")]public AssetReference sceneReference;
-    [Tooltip("重生点")] public CheckPoint CheckPoint;
 }
