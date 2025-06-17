@@ -18,7 +18,6 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
     [Header("场景管理")]
     [Tooltip("第一个场景数据")]public GameSceneDataSO firstGameSceneData;
     [Tooltip("当前场景数据")]public GameSceneDataSO currentGameSceneData;
-    [Tooltip("下一个加载场景数据")]public GameSceneDataSO nextGameSceneData;
     public CheckPoint currentCheckPoint; // 当前存档点
 
     [Header("数据存储管理")]
@@ -34,6 +33,7 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
         playerInputControl = new PlayerInputControl();
         playerInputControl.Gameplay.Restart.started += ReloadSence;
         currentGameSceneData = firstGameSceneData; // 初始化当前场景数据为第一个场景数据
+        LoadSence(currentGameSceneData); // 加载第一个场景
     }
     void OnEnable() {
         playerInputControl?.Enable();
@@ -46,13 +46,14 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
     }
 
     private void OnSenceLoadEvent(GameSceneDataSO gameSceneData) {
-        StartCoroutine(UnLoadPreviousScene());
-        
+        if (currentGameSceneData != null)
+            StartCoroutine(UnLoadPreviousScene(gameSceneData));
     }
 
     // 异步加载场景
     private void LoadSence(GameSceneDataSO gameSceneData) {
-        Addressables.LoadSceneAsync(gameSceneData.sceneReference, LoadSceneMode.Additive);
+        currentGameSceneData = gameSceneData; // 更新当前场景数据
+        gameSceneData.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
     }
 
     // 重新加载当前场景
@@ -72,19 +73,11 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
         }
     }
 
-    private IEnumerator UnLoadPreviousScene() {
+    private IEnumerator UnLoadPreviousScene(GameSceneDataSO gameSceneData) {
         // TODO:渐入渐出
-
         yield return new WaitForSeconds(fadeDuration);
-        Debug.Log("进入卸载场景流程currentGameSceneData${}", currentGameSceneData);
-        if (currentGameSceneData != null)
-            yield return currentGameSceneData.sceneReference.UnLoadScene();
 
-        LoadSence(nextGameSceneData);
-        //CheckPoint initialCheckPoint = FindObjectsOfType<CheckPoint>()
-        //    .FirstOrDefault(cp => cp.isInitialCheckPoint);
-        //if (initialCheckPoint != null) {
-        //    SetCheckPoint(initialCheckPoint); // 设置当前存档点
-        //}
+        yield return currentGameSceneData.sceneReference.UnLoadScene();
+        LoadSence(gameSceneData);
     }
 }

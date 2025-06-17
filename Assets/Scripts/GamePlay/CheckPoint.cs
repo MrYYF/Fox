@@ -15,7 +15,7 @@ public class CheckPoint : MonoBehaviour {
     private Collider2D checkPointArea; // 存档点触发器区域
 
     private void Awake() {
-        checkPointArea = checkPointArea.GetComponent<Collider2D>();
+        checkPointArea = GetComponent<Collider2D>();
         checkPointArea.isTrigger = true;// 确保触发器区域是触发器
     }
 
@@ -32,15 +32,15 @@ public class CheckPoint : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Player") && !isUsed) {
+        if (collision.CompareTag("Player") && !isUsed && isPortal) {
+            isUsed = true; // 设置为已使用
+            sceneLoadEvent.RaiseEvent(gameSceneData); // 如果是传送点，触发场景加载事件
+        }
+        else if (collision.CompareTag("Player") && !isUsed) {
             SetThisCheckPoint();
             //TODO: UI显示
             //TODO: 粒子效果播放
             //TODO: 音效播放
-        }
-
-        if (isPortal) {
-            sceneLoadEvent.RaiseEvent(gameSceneData); // 如果是传送点，触发场景加载事件
         }
     }
 
