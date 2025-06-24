@@ -19,24 +19,19 @@ public class CheckPoint : MonoBehaviour {
         checkPointArea.isTrigger = true;// 确保触发器区域是触发器
     }
 
-    private void Start() {
-        if (isInitialCheckPoint) {
-            SenceSaveManager.Instance.SetCheckPoint(this); // 如果是初始检查点，设置为当前存档点
-        }
-    }
-
-
     //SenceSaveManager，将当前存档点设置为当前存档点
     public void SetThisCheckPoint() {
         SenceSaveManager.Instance.SetCheckPoint(this);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Player") && !isUsed && isPortal) {
-            isUsed = true; // 设置为已使用
+        if (!collision.CompareTag("Player") || isUsed) return;
+
+        if (isPortal) {
             sceneLoadEvent.RaiseEvent(gameSceneData); // 如果是传送点，触发场景加载事件
         }
-        else if (collision.CompareTag("Player") && !isUsed) {
+        else {
+            isUsed = true; // 设置当前存档点为已使用
             SetThisCheckPoint();
             //TODO: UI显示
             //TODO: 粒子效果播放

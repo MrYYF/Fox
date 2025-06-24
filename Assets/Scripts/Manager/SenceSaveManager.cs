@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -51,9 +53,13 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
     }
 
     // 异步加载场景
-    private void LoadSence(GameSceneDataSO gameSceneData) {
+    private AsyncOperationHandle LoadSence(GameSceneDataSO gameSceneData) {
         currentGameSceneData = gameSceneData; // 更新当前场景数据
-        gameSceneData.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
+        AsyncOperationHandle<SceneInstance> asyncOperationHandle = gameSceneData.sceneReference.LoadSceneAsync(LoadSceneMode.Additive);
+        //asyncOperationHandle.IsDone; //是否完成
+        //asyncOperationHandle.PercentComplete; //加载进度
+        //asyncOperationHandle.Status; //当前加载状态（成功、失败、进行中）
+        return asyncOperationHandle;
     }
 
     // 重新加载当前场景
@@ -66,18 +72,35 @@ public class SenceSaveManager : Singleton<SenceSaveManager>
 
     // 设置检查点
     internal void SetCheckPoint(CheckPoint checkPoint) {
-        if(currentCheckPoint != null && checkPoint != currentCheckPoint) {
-            currentCheckPoint.isUsed = false; // 设置之前的存档点未使用
+        if(checkPoint != currentCheckPoint) {
+            if(currentCheckPoint != null)
+                currentCheckPoint.isUsed = false; // 设置之前的存档点未使用
             checkPoint.isUsed = true; // 设置当前存档点为已使用
             currentCheckPoint = checkPoint;
         }
     }
 
+    // 注册初始存档点
+    public void RegisterInitialCheckPoint() {
+        var initial = FindObjectsOfType<CheckPoint>()
+            .FirstOrDefault(cp => cp.isInitialCheckPoint);
+
+        if (initial != null) {
+            SetCheckPoint(initial.GetComponent<CheckPoint>());
+            Debug.Log("自动注册初始重生点：" + initial.name);
+        }
+    }
+
     private IEnumerator UnLoadPreviousScene(GameSceneDataSO gameSceneData) {
-        // TODO:渐入渐出
-        yield return new WaitForSeconds(fadeDuration);
+        // TODO:渐入
+        //yield return new WaitForSeconds(fadeDuration);
 
         yield return currentGameSceneData.sceneReference.UnLoadScene();
-        LoadSence(gameSceneData);
+        yield return LoadSence(gameSceneData);
+        RegisterInitialCheckPoint(); // 注册初始存档点
+
+        // TODO:渐出
+        yield return new WaitForSeconds(fadeDuration);
+        GameManager.Instance.CreatePlayer(currentCheckPoint.spawnPoint.position);
     }
 }
